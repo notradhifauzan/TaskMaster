@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">TaskMaster</string>
+
+    <string-array name="taskTitle">
+        <item>Futuristic City Modeling</item>
+        <item>Graphic Design Portfolio</item>
+    </string-array>
+    <string-array name="taskDomain">
+        <item>Create a 3D model of a futuristic cityscape with flying cars and advanced technology for sci-fi games.</item>
+        <item>Create a responsive website to showcase graphic design projects.</item>
+    </string-array>
 </resources>
