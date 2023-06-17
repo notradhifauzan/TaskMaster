@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/raleway_semibold_italic"
+                android:fontFamily="sans-serif"
                 android:text="Availabe Task"
                 android:textColor="#1F1888"
                 android:textSize="24sp"
@@ -62,10 +62,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="390dp"
-                android:layout_height="605dp"
-                android:layout_marginTop="1dp"
-                android:padding="10dp"
+                android:id="@+id/rvAvailableTask"
+                android:layout_width="match_parent"
+                android:layout_height="605sp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
