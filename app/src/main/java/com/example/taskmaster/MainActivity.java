@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.taskmaster.model.ErrorResponse;
@@ -23,6 +24,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    ProgressBar progressBar;
     Button btnLogin;
     EditText edtUsername;
     EditText edtPassword;
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
         findViews();
 
+        // set disable progress bar by default
+        progressBar.setVisibility(View.INVISIBLE);
+
         // get userService instance
         userService = ApiUtils.getUserService();
 
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // get username and password entered by user
                 String username = edtUsername.getText().toString();
                 String password = edtPassword.getText().toString();
@@ -62,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
     *
     * */
     private void doLogin(String username, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         Call call = userService.login(username,password);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 // received reply from REST API
                 if(response.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
                     // parse response to POJO
                     User user = (User) response.body();
                     if(user.getToken()!=null) {
@@ -77,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         goToTaskView();
                     }
                 } else if(response.errorBody() != null) {
+                    progressBar.setVisibility(View.GONE);
                     // parse response to POJO
                     String errorResp = null;
                     try{
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 displayToast("Error connecting to server");
                 displayToast(t.getMessage());
             }
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        progressBar = findViewById(R.id.progressBar);
         btnLogin = findViewById(R.id.loginButton);
         edtUsername = findViewById(R.id.username);
         edtPassword = findViewById(R.id.password);
