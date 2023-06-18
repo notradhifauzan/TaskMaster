@@ -39,11 +39,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.MyViewHolder holder, int position) {
 
-        holder.tvTitle.setText(taskModels.get(position).getTitle());
-        holder.tvDesc.setText(taskModels.get(position).getDescription());
-        holder.tvPrice.setText( "RM "+taskModels.get(position).getPrice());
-        holder.tvDate.setText(taskModels.get(position).getDate());
-        holder.tvTime.setText(taskModels.get(position).getTime());
+        holder.tvTitle.setText(taskModels.get(position).getJob_title());
+        holder.tvDesc.setText(taskModels.get(position).getJob_domain());
+        holder.tvPrice.setText( "RM "+taskModels.get(position).getBudget());
+        holder.tvDate.setText(taskModels.get(position).getDue_date());
+        holder.tvTime.setText(taskModels.get(position).getDue_time());
     }
 
     @Override

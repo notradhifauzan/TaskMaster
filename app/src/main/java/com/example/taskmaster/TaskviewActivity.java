@@ -4,42 +4,85 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
+import com.example.taskmaster.model.User;
+import com.example.taskmaster.remote.ApiUtils;
+import com.example.taskmaster.remote.TaskService;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskviewActivity extends AppCompatActivity {
 
-    ArrayList<Task> taskModels = new ArrayList<>(); //recyclerView check this 4 step.. 1.
-
+    TaskService taskService;
+    Context context;
+    RecyclerView taskList;
+    TaskAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taskview);
-        RecyclerView recyclerView = findViewById(R.id.rvAvailableTask);
 
-        setupTaskModels(); //recyclerView 2.
+        context = this; // get current activity context
 
+        // get reference to the RecyclerView tasklist
+        taskList = findViewById(R.id.rvAvailableTask);
 
-        TaskAdapter adapter = new TaskAdapter( this, taskModels);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // get user info from SharedPreferences
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
+        // get task service instance
+        taskService = ApiUtils.getTaskService();
 
+        // execute the call. send the user token when sending the query
+        taskService.getAllTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                // for debug purpose
+                Log.d("MyApp","Response: " + response.raw().toString());
+
+                if(response.code() == 401) {
+                    // authorization problem, go to login
+                    finish();
+                    goToActivity(MainActivity.class);
+                    return;
+                }
+
+                // get list of task object from response
+                List<Task> tasks = response.body();
+
+                // initialize adapter
+                adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+
+                // set adapter to the recyclerview
+                taskList.setAdapter(adapter);
+
+                // set layout to recycler view
+                taskList.setLayoutManager(new LinearLayoutManager(context));
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:",t.getMessage());
+            }
+        });
     }
 
-    private void setupTaskModels(){ //recyclerView 3.
-        String[] taskTitle = getResources().getStringArray(R.array.taskTitle);
-        String[] taskDesc = getResources().getStringArray(R.array.taskDescription);
-        String[] taskPrice = getResources().getStringArray(R.array.taskPrice);
-        String[] taskDate = getResources().getStringArray(R.array.taskDate);
-        String[] taskTime = getResources().getStringArray(R.array.taskTime);
-
-        for( int i = 0; i<taskTitle.length;i++){ //recyclerView 4. >>go to  adapter
-            taskModels.add( new Task(taskTitle[i], taskDesc[i], taskPrice[i],  taskDate[i], taskTime[i]));
-        }
+    private void goToActivity(Class<MainActivity> mainActivityClass) {
+        startActivity(new Intent(this,MainActivity.class));
     }
 }

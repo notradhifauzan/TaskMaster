@@ -11,4 +11,8 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(UserService.class);
     }
 
+    public static TaskService getTaskService() {
+        return RetrofitClient.getClient(BASE_URL).create(TaskService.class);
+    }
+
 }

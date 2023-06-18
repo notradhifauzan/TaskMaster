@@ -2,6 +2,7 @@ package com.example.taskmaster.model;
 
 public class Task {
     public int jobid;
+    public double budget;
     public String job_title;
     public String job_domain;
     public String requirements;
@@ -26,6 +27,14 @@ public class Task {
 
     public int getJobid() {
         return jobid;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(double budget) {
+        this.budget = budget;
     }
 
     public void setJobid(int jobid) {

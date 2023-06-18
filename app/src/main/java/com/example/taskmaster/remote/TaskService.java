@@ -10,6 +10,6 @@ import retrofit2.http.Header;
 
 public interface TaskService {
 
-    @GET("task")
+    @GET("jobs")
     Call<List<Task>> getAllTask(@Header("api-key") String api_key);
 }
