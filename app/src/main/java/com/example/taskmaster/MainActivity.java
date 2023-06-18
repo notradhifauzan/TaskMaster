@@ -44,8 +44,15 @@ public class MainActivity extends AppCompatActivity {
         // if the user is already logged in we will directly start
         // the main activity
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this,TaskviewActivity.class));
+            if(SharedPrefManager.getInstance(this).getUser().getRole().equalsIgnoreCase("admin"))
+            {
+                finish();
+                startActivity(new Intent(this,AddTaskActivity.class));
+            } else {
+                finish();
+                startActivity(new Intent(this,TaskviewActivity.class));
+            }
+
             return;
         }
 
@@ -95,7 +102,14 @@ public class MainActivity extends AppCompatActivity {
                         // store value in Shared Preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                        goToTaskView();
+                        // if role is agent, go to task view
+                        if(user.getRole().equalsIgnoreCase("agent"))
+                        {
+                            goToTaskView();
+                        } else if (user.getRole().equalsIgnoreCase("admin")) {
+                            goToTaskCreator();
+                        }
+
                     }
                 } else if(response.errorBody() != null) {
                     progressBar.setVisibility(View.GONE);
@@ -118,6 +132,11 @@ public class MainActivity extends AppCompatActivity {
                 displayToast(t.getMessage());
             }
         });
+    }
+
+    private void goToTaskCreator() {
+        finish();
+        startActivity(new Intent(this,AddTaskActivity.class));
     }
 
     private void displayToast(String message) {
