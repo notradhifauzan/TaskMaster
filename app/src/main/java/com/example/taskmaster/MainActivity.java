@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.taskmaster.model.ErrorResponse;
+import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.User;
 import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.UserService;
@@ -39,6 +40,14 @@ public class MainActivity extends AppCompatActivity {
 
         // set disable progress bar by default
         progressBar.setVisibility(View.INVISIBLE);
+
+        // if the user is already logged in we will directly start
+        // the main activity
+        if(SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this,TaskviewActivity.class));
+            return;
+        }
 
         // get userService instance
         userService = ApiUtils.getUserService();
@@ -82,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
                         // successful login. server replies a token value
                         displayToast("Login successful");
                         finish();
+
+                        // store value in Shared Preferences
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
                         goToTaskView();
                     }
                 } else if(response.errorBody() != null) {
