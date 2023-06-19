@@ -96,4 +96,19 @@ public class Task {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "jobid=" + jobid +
+                ", budget=" + budget +
+                ", job_title='" + job_title + '\'' +
+                ", job_domain='" + job_domain + '\'' +
+                ", requirements='" + requirements + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", due_date='" + due_date + '\'' +
+                ", due_time='" + due_time + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

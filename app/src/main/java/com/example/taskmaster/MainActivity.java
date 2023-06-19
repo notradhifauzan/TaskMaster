@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                             goToTaskView();
                         } else if (user.getRole().equalsIgnoreCase("admin")) {
                             goToTaskCreator();
+                        } else {
+                            goToTaskView();
                         }
 
                     }

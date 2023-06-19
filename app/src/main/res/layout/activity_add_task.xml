@@ -46,34 +46,33 @@
                 android:hint="Budget"
                 android:inputType="number"/>
 
-            <TextView
-                android:textSize="18sp"
+            <!-- dueDateInput is the id for DatePicker -->
+            <LinearLayout
                 android:layout_margin="10dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Due Date"/>
+                android:layout_height="wrap_content">
 
-            <DatePicker
-                android:id="@+id/dueDateInput"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <EditText
+                    android:layout_weight="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Due Date"
+                    />
 
-            <TextView
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Due Time"/>
+                <EditText
+                    android:layout_weight="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Due Time"
+                    />
 
-            <TimePicker
-                android:id="@+id/dueTimeInput"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            </LinearLayout>
 
             <Button
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:id="@+id/taskSubmitButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
