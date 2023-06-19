@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
+                    android:id="@+id/edtDueDate"
                     android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,6 +63,7 @@
                     />
 
                 <EditText
+                    android:id="@+id/edtDueTime"
                     android:layout_weight="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -2,7 +2,11 @@ package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -12,19 +16,30 @@ import android.widget.Toast;
 
 import com.example.taskmaster.model.Task;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity {
 
+    // DatePickerDialog variables
     Calendar calendar = Calendar.getInstance();
     int year = calendar.get(Calendar.YEAR);
     int month = calendar.get(Calendar.MONTH);
     int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
+    //TimePickerDialog variables
+    int hours = calendar.get(Calendar.HOUR);
+    int minutes = calendar.get(Calendar.MINUTE);
+    int seconds = calendar.get(Calendar.SECOND);
+
+
+    String inputJobTitle,inputJobDomain,inputJobRequirements;
+    double inputJobBudget;
+
+    String selectedDueDate;
+    String selectedDueTime;
     EditText edtJobTitle, edtJobDomain, edtJobRequirements,
-                edtBudget;
-    DatePicker dueDateInput;
-    TimePicker dueTimeInput;
+                edtBudget,edtDueDate,edtDueTime;
     Button taskSubmit;
 
     Task task;
@@ -35,47 +50,157 @@ public class AddTaskActivity extends AppCompatActivity {
 
         findViews();
 
+        // Due date listener
+        edtDueDate.setFocusable(false);
+        edtDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
+        //Due time listener
+        edtDueTime.setFocusable(false);
+        edtDueTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTimeDialog();
+            }
+        });
+
+        // on submit button
         taskSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateInput();
+                // get all field data
+                initializeVariables();
+
+                if(validateInput())
+                {
+                    Log.d("myApp:","input is validated!");
+                    task = new Task();
+                    initializeTaskObject(task);
+                    Log.d("myApp: ",task.toString());
+                }
             }
         });
 
     }
 
-    private boolean validateInput() {
-        if(edtJobTitle == null || edtJobTitle.getText().toString().trim().length() == 0) {
-            displayToast("Job Title is required");
-            return false;
-        } else {
-            task.setJob_title(edtJobTitle.getText().toString());
-        }
-        if(edtJobDomain == null || edtJobDomain.getText().toString().trim().length() == 0) {
-            displayToast("Job Domain is required");
-            return false;
-        } else {
-            task.setJob_domain(edtJobDomain.getText().toString());
-        }
-        if(edtJobRequirements == null || edtJobRequirements.getText().toString().trim().length() == 0) {
-            displayToast("Job Requirements is required");
-            return false;
-        } else {
-            task.setRequirements(edtJobRequirements.getText().toString());
-        }
-        if(edtBudget == null || edtBudget.getText().toString().trim().length() == 0) {
-            displayToast("Job Budget is required");
-            return false;
-        } else {
-            task.setBudget(Double.parseDouble(edtBudget.toString()));
+    private void openTimeDialog() {
+        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+                String hourStr="", minuteStr = "";
+                if(hours<10)
+                {
+                    hourStr = "0" + hours;
+                } else{
+                    hourStr = String.valueOf(hours);
+                }
+
+                if(minutes<10)
+                {
+                    minuteStr = "0" + minutes;
+                } else {
+                    minuteStr = String.valueOf(minutes);
+                }
+
+                edtDueTime.setText(hourStr+":"+minuteStr+":"+"00");
+                selectedDueTime = hourStr+":"+minuteStr+":"+"00";
+            }
+        }, hours, minutes, true);
+
+        dialog.show();
+    }
+
+    private void openDialog() {
+        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                month = month+1;
+                String dayStr = "", monthStr="";
+
+                if(dayOfMonth<10)
+                {
+                    dayStr = "0" + dayOfMonth;
+                } else {
+                    dayStr = String.valueOf(dayOfMonth);
+                }
+
+                if(month<10)
+                {
+                    monthStr = "0" + month;
+                } else {
+                    monthStr = String.valueOf(month);
+                }
+
+                String dateBuilder = year + "-" + monthStr + "-" + dayStr;
+                edtDueDate.setText(dateBuilder);
+                selectedDueDate = dateBuilder;
+
+            }
+        }, year, month, dayOfMonth);
+
+        dialog.show();
+    }
+
+    private void initializeTaskObject(Task task) {
+        task.setJob_title(inputJobTitle);
+        task.setJob_domain(inputJobDomain);
+        task.setRequirements(inputJobRequirements);
+        task.setBudget(inputJobBudget);
+        task.setDue_date(selectedDueDate);
+        task.setDue_time(selectedDueTime);
+    }
+
+    private void initializeVariables() {
+        inputJobTitle = edtJobTitle.getText().toString();
+        inputJobDomain = edtJobRequirements.getText().toString();
+        inputJobRequirements = edtJobRequirements.getText().toString();
+
+        try {
+            inputJobBudget = Double.parseDouble(edtBudget.getText().toString());
+        } catch(NumberFormatException e) {
+            inputJobBudget = 0.00;
         }
 
-        dueDateInput.init(year, month, dayOfMonth, new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String selectedDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            }
-        });
+    }
+
+    private boolean validateInput() {
+        if(inputJobTitle == null || inputJobTitle.trim().length() == 0)
+        {
+            displayToast("Job Title is required");
+            return false;
+        }
+
+        if(inputJobDomain == null || inputJobDomain.trim().length()==0)
+        {
+            displayToast("Job Domain is required");
+            return false;
+        }
+
+        if(inputJobRequirements == null || inputJobRequirements.trim().length()==0)
+        {
+            displayToast("Job Requirements is required");
+            return false;
+        }
+
+        if(inputJobBudget <=0 ){
+            displayToast("Job Budget is required");
+            return false;
+        }
+
+        if(selectedDueDate == null || selectedDueDate.length() == 0)
+        {
+            displayToast("Job due date is required");
+            return false;
+        }
+
+        if(selectedDueTime == null || selectedDueTime.length() == 0) {
+            displayToast("Job due time is required");
+            return false;
+        }
 
         return true;
     }
@@ -89,9 +214,9 @@ public class AddTaskActivity extends AppCompatActivity {
         edtJobDomain = findViewById(R.id.edtJobDomain);
         edtJobRequirements = findViewById(R.id.edtJobRequirements);
         edtBudget = findViewById(R.id.edtBudget);
+        edtDueDate = findViewById(R.id.edtDueDate);
+        edtDueTime = findViewById(R.id.edtDueTime);
 
-        dueDateInput = findViewById(R.id.dueDateInput);
-        dueTimeInput = findViewById(R.id.dueTimeInput);
 
         taskSubmit = findViewById(R.id.taskSubmitButton);
     }
