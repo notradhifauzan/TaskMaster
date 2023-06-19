@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,10 +16,18 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
+import com.example.taskmaster.model.User;
+import com.example.taskmaster.remote.ApiUtils;
+import com.example.taskmaster.remote.TaskService;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -43,6 +53,9 @@ public class AddTaskActivity extends AppCompatActivity {
     Button taskSubmit;
 
     Task task;
+
+    TaskService taskService;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +93,49 @@ public class AddTaskActivity extends AppCompatActivity {
                     Log.d("myApp:","input is validated!");
                     task = new Task();
                     initializeTaskObject(task);
+
+                    // debugging purpose
                     Log.d("myApp: ",task.toString());
+
+                    // send POST request
+                    sendPOSTrequest(task);
                 }
             }
         });
 
+    }
+
+    private void sendPOSTrequest(Task task) {
+        // get user info from SharedPreferences
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+        taskService = ApiUtils.getTaskService();
+        taskService.createTask(user.getToken(),task).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                Log.d("MyApp:","Response: " + response.raw().toString());
+
+                if(response.code() == 401)
+                {
+                    // authorization problem, go to login
+                    finish();
+                    goToMainActivity();
+                    return;
+                } else {
+                    displayToast("Successfully create new task.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:",t.getMessage());
+            }
+        });
+    }
+
+    private void goToMainActivity() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private void openTimeDialog() {
