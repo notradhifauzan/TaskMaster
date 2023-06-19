@@ -122,6 +122,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     return;
                 } else {
                     displayToast("Successfully create new task.");
+                    finish();
+                    startActivity(new Intent(getApplicationContext(),AdminTaskView.class));
                 }
             }
 

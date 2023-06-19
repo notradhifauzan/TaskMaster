@@ -12,8 +12,11 @@ import retrofit2.http.POST;
 
 public interface TaskService {
 
-    @GET("jobs")
+    @GET("jobs/?order=created_at&orderType=desc")
     Call<List<Task>> getAllTask(@Header("api-key") String api_key);
+
+    @GET("jobs/?userid[in]=null")
+    Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
 
     @POST("jobs")
     Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);
