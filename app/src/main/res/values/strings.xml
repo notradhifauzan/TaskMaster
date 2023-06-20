@@ -3,6 +3,7 @@
     <string name="logout">logout</string>
     <string name="report_bugs">report bugs</string>
     <string name="about">about</string>
+    <string name="add_task">add task</string>
 
     <string-array name="taskTitle">
         <item>Futuristic City Modeling</item>

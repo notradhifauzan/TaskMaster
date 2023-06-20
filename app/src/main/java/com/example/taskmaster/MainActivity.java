@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             if(SharedPrefManager.getInstance(this).getUser().getRole().equalsIgnoreCase("admin"))
             {
                 finish();
-                startActivity(new Intent(this,AddTaskActivity.class));
+                startActivity(new Intent(this, AdminTaskView.class));
             } else {
                 finish();
                 startActivity(new Intent(this,TaskviewActivity.class));
@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
                         {
                             goToTaskView();
                         } else if (user.getRole().equalsIgnoreCase("admin")) {
-                            goToTaskCreator();
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
                         } else {
                             goToTaskView();
                         }

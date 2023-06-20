@@ -68,6 +68,9 @@ public class AddTaskActivity extends AppCompatActivity {
 
         findViews();
 
+        // enable back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Due date listener
         edtDueDate.setFocusable(false);
         edtDueDate.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +129,12 @@ public class AddTaskActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.logout)
         {
             logoutDialogbox();
+            return true;
+        }
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
             return true;
         }
         return false;
