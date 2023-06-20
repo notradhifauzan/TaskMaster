@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- On action bar -->
+    <!-- Overflow menu. No need for icon -->
+
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout"
+        android:icon="@drawable/baseline_logout_24"
+        />
+    <item android:id="@+id/report_bugs"
+        android:title="@string/report_bugs" />
+    <item android:id="@+id/about"
+        android:title="@string/about"/>
+
+</menu>
