@@ -43,18 +43,20 @@ public class MainActivity extends AppCompatActivity {
 
         // if the user is already logged in we will directly start
         // the main activity
+
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
             if(SharedPrefManager.getInstance(this).getUser().getRole().equalsIgnoreCase("admin"))
             {
-                finish();
                 startActivity(new Intent(this, AdminTaskView.class));
-            } else {
                 finish();
+            } else {
                 startActivity(new Intent(this,TaskviewActivity.class));
+                finish();
             }
 
             return;
         }
+
 
         // get userService instance
         userService = ApiUtils.getUserService();
@@ -107,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
                         {
                             goToTaskView();
                         } else if (user.getRole().equalsIgnoreCase("admin")) {
-                            finish();
                             startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
+                            finish();
                         } else {
                             goToTaskView();
                         }
@@ -138,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToTaskCreator() {
-        finish();
         startActivity(new Intent(this,AddTaskActivity.class));
+        finish();
     }
 
     private void displayToast(String message) {
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToTaskView() {
         Intent intent = new Intent(this, TaskviewActivity.class);
-        finish();
         startActivity(intent);
+        finish();
     }
 }

@@ -174,8 +174,8 @@ public class AdminTaskView extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
-        finish();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        finish();
     }
 
     private void goToActivity(Class<MainActivity> mainActivityClass) {

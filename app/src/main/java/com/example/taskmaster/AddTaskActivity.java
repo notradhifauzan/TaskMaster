@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
 import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.TaskService;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -176,8 +179,8 @@ public class AddTaskActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
-        finish();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        finish();
     }
 
     private void sendPOSTrequest(Task task) {
@@ -192,13 +195,19 @@ public class AddTaskActivity extends AppCompatActivity {
                 if(response.code() == 401)
                 {
                     // authorization problem, go to login
+                    displayToast("Something went wrong: " + response.code());
                     finish();
                     goToMainActivity();
                     return;
                 } else {
-                    displayToast("Successfully create new task.");
-                    finish();
+                    if(response.code() == 201)
+                    {
+                        displayToast("Task created successfully");
+                    } else {
+                        displayToast("Failed to create new task: " + response.code());
+                    }
                     startActivity(new Intent(getApplicationContext(),AdminTaskView.class));
+                    finish();
                 }
             }
 
@@ -211,8 +220,8 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        finish();
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void openTimeDialog() {
@@ -335,6 +344,17 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void displayToast(String message) {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    public void displaySnackbar(String message, boolean error) {
+        LinearLayout layout = findViewById(R.id.linearLayout);
+        Snackbar snackbar = Snackbar.make(layout, message,Snackbar.LENGTH_LONG);
+
+        // if error message, set snackBar color to red
+        if (error)
+            snackbar.setBackgroundTint(Color.RED);
+
+        snackbar.show();
     }
 
     private void findViews() {
