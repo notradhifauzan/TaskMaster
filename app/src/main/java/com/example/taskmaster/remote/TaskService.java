@@ -10,6 +10,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface TaskService {
 
@@ -21,4 +22,8 @@ public interface TaskService {
 
     @POST("jobs")
     Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);
+
+    // delete a task record
+    @POST("jobs/delete/{id}")
+    Call deleteTask(@Header("api-key") String api_key, @Path("id") int id);
 }

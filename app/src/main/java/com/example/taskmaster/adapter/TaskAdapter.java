@@ -52,7 +52,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         return taskModels.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{ //Act like OnCreate method
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        //Act like OnCreate method
         TextView tvTitle, tvDesc, tvPrice, tvDate, tvTime ;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

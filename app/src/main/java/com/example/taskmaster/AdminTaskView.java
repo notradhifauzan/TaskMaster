@@ -10,9 +10,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.taskmaster.adapter.TaskAdapter;
@@ -44,6 +46,9 @@ public class AdminTaskView extends AppCompatActivity {
 
         taskList = findViewById(R.id.rv_admin_view_task);
 
+        // register the taskList recycler view for context menu
+        super.registerForContextMenu(taskList);
+
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
@@ -58,23 +63,20 @@ public class AdminTaskView extends AppCompatActivity {
 
                 if(response.code() == 401) {
                     // authorization problem, go to login
-                    finish();
-                    goToActivity(MainActivity.class);
-                    return;
+                    logoutAlert("Session expired");
+                } else {
+                    // get list of task object from response
+                    List<Task> tasks = response.body();
+
+                    // initialize adapter
+                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+
+                    // set adapter to the recyclerview
+                    taskList.setAdapter(adapter);
+
+                    // set layout to recycler view
+                    taskList.setLayoutManager(new LinearLayoutManager(context));
                 }
-
-                // get list of task object from response
-                List<Task> tasks = response.body();
-
-                // initialize adapter
-                adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
-
-                // set adapter to the recyclerview
-                taskList.setAdapter(adapter);
-
-                // set layout to recycler view
-                taskList.setLayoutManager(new LinearLayoutManager(context));
-
             }
 
             @Override
@@ -84,6 +86,36 @@ public class AdminTaskView extends AppCompatActivity {
             }
         });
     }
+
+    public void logoutAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        doLogout();
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        // call the original method in superclass
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+
+        // use our XML file for the menu items
+        inflater.inflate(R.menu.admin_task_context_menu, menu);
+
+        // set menu title - optional
+        menu.setHeaderTitle("Select the action:");
+    }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // get the menu inflater

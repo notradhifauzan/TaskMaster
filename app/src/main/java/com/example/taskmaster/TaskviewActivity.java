@@ -60,22 +60,22 @@ public class TaskviewActivity extends AppCompatActivity {
 
                 if(response.code() == 401) {
                     // authorization problem, go to login
-                    finish();
-                    goToActivity(MainActivity.class);
-                    return;
+                    logoutAlert("Session expired");
+                } else {
+                    // get list of task object from response
+                    List<Task> tasks = response.body();
+
+                    // initialize adapter
+                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+
+                    // set adapter to the recyclerview
+                    taskList.setAdapter(adapter);
+
+                    // set layout to recycler view
+                    taskList.setLayoutManager(new LinearLayoutManager(context));
                 }
 
-                // get list of task object from response
-                List<Task> tasks = response.body();
 
-                // initialize adapter
-                adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
-
-                // set adapter to the recyclerview
-                taskList.setAdapter(adapter);
-
-                // set layout to recycler view
-                taskList.setLayoutManager(new LinearLayoutManager(context));
 
             }
 
@@ -150,5 +150,34 @@ public class TaskviewActivity extends AppCompatActivity {
         // forward to MainActivity
         finish();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
+
+    public void logoutAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        doLogout();
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void displayAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
