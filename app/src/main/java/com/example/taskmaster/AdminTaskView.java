@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -125,6 +126,20 @@ public class AdminTaskView extends AppCompatActivity {
         inflater.inflate(R.menu.task_options_menu,menu);
 
         return true;
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        super.onContextItemSelected(item);
+        switch(item.getItemId())
+        {
+            case 101: Log.d("myApp","You clicked details context menu");
+            return true;
+            case 102: Log.d("myApp","You clicked delete context menu");
+            return true;
+            default: break;
+        }
+        return false;
     }
 
     @Override

@@ -2,12 +2,16 @@ package com.example.taskmaster.adapter;
 
 import android.content.Context;
 import android.view.ContentInfo;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmaster.R;
@@ -52,9 +56,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         return taskModels.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         //Act like OnCreate method
         TextView tvTitle, tvDesc, tvPrice, tvDate, tvTime ;
+        CardView cv;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -63,6 +68,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
+            cv = itemView.findViewById(R.id.task_cardView);
+            cv.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo contextMenuInfo) {
 
         }
     }
