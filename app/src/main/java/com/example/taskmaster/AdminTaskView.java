@@ -225,7 +225,4 @@ public class AdminTaskView extends AppCompatActivity {
         finish();
     }
 
-    private void goToActivity(Class<MainActivity> mainActivityClass) {
-        startActivity(new Intent(this,MainActivity.class));
-    }
 }

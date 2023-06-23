@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,9 +11,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.taskmaster.adapter.TaskAdapter;
@@ -44,6 +47,9 @@ public class TaskviewActivity extends AppCompatActivity {
 
         // get reference to the RecyclerView tasklist
         taskList = findViewById(R.id.rvAvailableTask);
+
+        // register the taskList recycler view for context menu
+        super.registerForContextMenu(taskList);
 
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
@@ -85,10 +91,6 @@ public class TaskviewActivity extends AppCompatActivity {
                 Log.e("MyApp:",t.getMessage());
             }
         });
-    }
-
-    private void goToActivity(Class<MainActivity> mainActivityClass) {
-        startActivity(new Intent(this,MainActivity.class));
     }
 
     @Override
@@ -138,6 +140,31 @@ public class TaskviewActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
 
+    }
+
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        super.onContextItemSelected(item);
+        switch(item.getItemId())
+        {
+            case 101: Log.d("myApp","You clicked pos.no " + adapter.getItemId(1));
+                return true;
+            default: break;
+        }
+        return false;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        // call the original method in superclass
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+
+        // use our XML file for the menu items
+        inflater.inflate(R.menu.task_context_menu, menu);
+
+        // set menu title - optional
+        menu.setHeaderTitle("Select the action:");
     }
 
     private void doLogout() {

@@ -25,6 +25,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     //setup 2 variable here
     Context context;
     ArrayList<Task> taskModels;
+    private int currentPos;
 
     public TaskAdapter (Context context, ArrayList<Task> taskModels){
         this.context = context;
@@ -56,7 +57,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         return taskModels.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         //Act like OnCreate method
         TextView tvTitle, tvDesc, tvPrice, tvDate, tvTime ;
         CardView cv;
@@ -69,12 +70,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
             cv = itemView.findViewById(R.id.task_cardView);
-            cv.setOnCreateContextMenuListener(this);
+
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo contextMenuInfo) {
-
+        public boolean onLongClick(View view) {
+            currentPos = getAdapterPosition();
+            return false;
         }
+    }
+
+    public Task getSelectedItem() {
+        if(currentPos >= 0 && taskModels!=null && currentPos<taskModels.size()) {
+            return taskModels.get(currentPos);
+        }
+        return null;
     }
 }
