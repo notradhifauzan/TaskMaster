@@ -1,5 +1,6 @@
 package com.example.taskmaster.remote;
 
+import com.example.taskmaster.model.DeleteResponse;
 import com.example.taskmaster.model.Task;
 
 import java.util.List;
@@ -25,5 +26,5 @@ public interface TaskService {
 
     // delete a task record
     @POST("jobs/delete/{id}")
-    Call deleteTask(@Header("api-key") String api_key, @Path("id") int id);
+    Call<DeleteResponse> deleteTask(@Header("api-key") String api_key, @Path("id") int id);
 }

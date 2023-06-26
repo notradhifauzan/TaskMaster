@@ -18,7 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.taskmaster.adapter.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.model.DeleteResponse;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -34,6 +36,7 @@ import retrofit2.Response;
 
 public class AdminTaskView extends AppCompatActivity {
 
+    LoadingAlert loadingAlert;
     TaskService taskService;
     Context context;
     RecyclerView taskList;
@@ -50,42 +53,9 @@ public class AdminTaskView extends AppCompatActivity {
         // register the taskList recycler view for context menu
         super.registerForContextMenu(taskList);
 
-        // get user info from SharedPreferences
-        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+        // update listview
+        updateListView();
 
-        // get task service instance
-        taskService = ApiUtils.getTaskService();
-
-        taskService.getAllTask(user.getToken()).enqueue(new Callback<List<Task>>() {
-            @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                // for debug purpose
-                Log.d("MyApp","Response: " + response.raw().toString());
-
-                if(response.code() == 401) {
-                    // authorization problem, go to login
-                    logoutAlert("Session expired");
-                } else {
-                    // get list of task object from response
-                    List<Task> tasks = response.body();
-
-                    // initialize adapter
-                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
-
-                    // set adapter to the recyclerview
-                    taskList.setAdapter(adapter);
-
-                    // set layout to recycler view
-                    taskList.setLayoutManager(new LinearLayoutManager(context));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
-            }
-        });
     }
 
     public void logoutAlert(String message) {
@@ -130,16 +100,113 @@ public class AdminTaskView extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        super.onContextItemSelected(item);
-        switch(item.getItemId())
-        {
-            case 101: Log.d("myApp","You clicked details context menu");
-            return true;
-            case 102: Log.d("myApp","You clicked delete context menu");
-            return true;
-            default: break;
+        Task selectedTask = adapter.getSelectedItem();
+        Log.d("myapp","selected " + selectedTask.toString());
+
+        if(item.getItemId() == R.id.details) {
+            Log.d("myApp","You clicked details context menu");
+        } else if (item.getItemId() == R.id.delete) {
+            loadingAlert = new LoadingAlert(this);
+            loadingAlert.startAlertDialog();
+            doDeleteTask(selectedTask);
+            Log.d("myapp","you clicked delete task context menu");
         }
-        return false;
+
+        return super.onContextItemSelected(item);
+    }
+
+    /*
+    * Delete book record. Called by contextual menu "Delete"
+    * @param selectedTask = task selected by admin
+    *
+    * */
+    private void doDeleteTask(Task selectedTask) {
+        Log.d("myapp","attempting to delete task ");
+        // get user info from SharedPreferences
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+
+        // prepare REST API call
+        taskService = ApiUtils.getTaskService();
+        try{
+            Call<DeleteResponse> call = taskService.deleteTask(user.getToken(),selectedTask.getJobid());
+            // execute the call
+            call.enqueue(new Callback<DeleteResponse>() {
+                @Override
+                public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                    Log.d("myapp",response.message());
+                    if(response.code() == 200) {
+                        // 200 means ok
+                        displayAlert("Task successfully deleted");
+
+                        // update data in list view
+                        updateListView();
+                    }
+                    loadingAlert.closeAlertDialog();
+                }
+
+                @Override
+                public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                    displayAlert("Error [" + t.getMessage() + "]");
+                    Log.e("myapp",t.getMessage());
+                }
+            });
+        } catch(Exception e) {
+            Log.e("retrofit error",e.getMessage());
+            loadingAlert.closeAlertDialog();
+        }
+    }
+
+    private void updateListView() {
+        // get user info from SharedPreferences
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+
+        // get task service instance
+        taskService = ApiUtils.getTaskService();
+
+        taskService.getAllTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                // for debug purpose
+                Log.d("MyApp","Response: " + response.raw().toString());
+
+                if(response.code() == 401) {
+                    // authorization problem, go to login
+                    logoutAlert("Session expired");
+                } else {
+                    // get list of task object from response
+                    List<Task> tasks = response.body();
+
+                    // initialize adapter
+                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+
+                    // set adapter to the recyclerview
+                    taskList.setAdapter(adapter);
+
+                    // set layout to recycler view
+                    taskList.setLayoutManager(new LinearLayoutManager(context));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:",t.getMessage());
+            }
+        });
+    }
+
+    public void displayAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
