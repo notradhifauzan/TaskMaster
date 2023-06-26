@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.example.taskmaster.admins;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.taskmaster.adapter.LoadingAlert;
+import com.example.taskmaster.MainActivity;
+import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.admins.AddTaskActivity;
 import com.example.taskmaster.model.DeleteResponse;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -236,7 +239,7 @@ public class AdminTaskView extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getApplicationContext(),AddTaskActivity.class));
+                        startActivity(new Intent(getApplicationContext(), AddTaskActivity.class));
                     }
                 });
         builder.setNegativeButton("No",
@@ -288,7 +291,7 @@ public class AdminTaskView extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 

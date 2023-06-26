@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.taskmaster.admins.AddTaskActivity;
+import com.example.taskmaster.admins.AdminTaskView;
+import com.example.taskmaster.agents.TaskviewActivity;
 import com.example.taskmaster.model.ErrorResponse;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.User;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AdminTaskView.class));
                 finish();
             } else {
-                startActivity(new Intent(this,TaskviewActivity.class));
+                startActivity(new Intent(this, TaskviewActivity.class));
                 finish();
             }
 
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToTaskCreator() {
-        startActivity(new Intent(this,AddTaskActivity.class));
+        startActivity(new Intent(this, AddTaskActivity.class));
         finish();
     }
 

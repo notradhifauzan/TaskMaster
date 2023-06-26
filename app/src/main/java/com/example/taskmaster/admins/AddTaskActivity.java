@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.example.taskmaster.admins;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.taskmaster.MainActivity;
+import com.example.taskmaster.R;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -30,7 +31,6 @@ import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.TaskService;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.NumberFormat;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -179,7 +179,7 @@ public class AddTaskActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
@@ -206,7 +206,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     } else {
                         displayToast("Failed to create new task: " + response.code());
                     }
-                    startActivity(new Intent(getApplicationContext(),AdminTaskView.class));
+                    startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
                     finish();
                 }
             }

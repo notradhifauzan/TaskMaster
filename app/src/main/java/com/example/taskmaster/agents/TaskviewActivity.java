@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.example.taskmaster.agents;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.taskmaster.MainActivity;
+import com.example.taskmaster.R;
 import com.example.taskmaster.adapter.TaskAdapter;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -176,7 +178,7 @@ public class TaskviewActivity extends AppCompatActivity {
 
         // forward to MainActivity
         finish();
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     public void logoutAlert(String message) {
