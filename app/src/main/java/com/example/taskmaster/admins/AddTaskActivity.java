@@ -48,14 +48,14 @@ public class AddTaskActivity extends AppCompatActivity {
     //TimePickerDialog variables
     int hours = calendar.get(Calendar.HOUR);
     int minutes = calendar.get(Calendar.MINUTE);
-    int seconds = calendar.get(Calendar.SECOND);
 
+    String selectedDueDate;
+    String selectedDueTime;
 
     String inputJobTitle,inputJobDomain,inputJobRequirements;
     double inputJobBudget;
 
-    String selectedDueDate;
-    String selectedDueTime;
+
     EditText edtJobTitle, edtJobDomain, edtJobRequirements,
                 edtBudget,edtDueDate,edtDueTime;
     Button taskSubmit;

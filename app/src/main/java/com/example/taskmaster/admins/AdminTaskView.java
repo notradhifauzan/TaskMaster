@@ -106,8 +106,9 @@ public class AdminTaskView extends AppCompatActivity {
         Task selectedTask = adapter.getSelectedItem();
         Log.d("myapp","selected " + selectedTask.toString());
 
-        if(item.getItemId() == R.id.details) {
-            Log.d("myApp","You clicked details context menu");
+        if(item.getItemId() == R.id.update) {
+            doViewDetails(selectedTask);
+            Log.d("myApp","You clicked update context menu");
         } else if (item.getItemId() == R.id.delete) {
             loadingAlert = new LoadingAlert(this);
             loadingAlert.startAlertDialog();
@@ -116,6 +117,13 @@ public class AdminTaskView extends AppCompatActivity {
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    private void doViewDetails(Task selectedTask) {
+        Log.d("myapp","viewing details " + selectedTask.toString());
+        Intent intent = new Intent(context,UpdateTaskActivity.class);
+        intent.putExtra("task_id", selectedTask.getJobid());
+        startActivity(intent);
     }
 
     /*
