@@ -116,12 +116,13 @@ public class AdminTaskView extends AppCompatActivity {
             Log.d("myapp","you clicked delete task context menu");
         }
 
-        return super.onContextItemSelected(item);
+        return false;
+        //return super.onContextItemSelected(item);
     }
 
     private void doViewDetails(Task selectedTask) {
         Log.d("myapp","viewing details " + selectedTask.toString());
-        Intent intent = new Intent(context,UpdateTaskActivity.class);
+        Intent intent = new Intent(getApplicationContext(),UpdateTaskActivity.class);
         intent.putExtra("task_id", selectedTask.getJobid());
         startActivity(intent);
     }

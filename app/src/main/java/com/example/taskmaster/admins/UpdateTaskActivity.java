@@ -2,11 +2,13 @@ package com.example.taskmaster.admins;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -56,6 +58,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_task);
         findViews();
 
+
         // enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -84,6 +87,17 @@ public class UpdateTaskActivity extends AppCompatActivity {
         // load the task details
         loadTaskDetails(id);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void openTimeDialog() {
