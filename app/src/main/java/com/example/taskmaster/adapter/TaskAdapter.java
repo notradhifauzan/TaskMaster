@@ -1,6 +1,7 @@
 package com.example.taskmaster.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ContentInfo;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -53,7 +54,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-
         return taskModels.size();
     }
 

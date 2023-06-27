@@ -22,6 +22,7 @@ import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.adapter.TaskAdapter2;
 import com.example.taskmaster.admins.AddTaskActivity;
 import com.example.taskmaster.model.DeleteResponse;
 import com.example.taskmaster.model.SharedPrefManager;
@@ -43,7 +44,7 @@ public class AdminTaskView extends AppCompatActivity {
     TaskService taskService;
     Context context;
     RecyclerView taskList;
-    TaskAdapter adapter;
+    TaskAdapter2 adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class AdminTaskView extends AppCompatActivity {
 
         context = this;
 
+        // get reference to the recyclerView taskList
         taskList = findViewById(R.id.rv_admin_view_task);
 
         // register the taskList recycler view for context menu
@@ -104,7 +106,7 @@ public class AdminTaskView extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         Task selectedTask = adapter.getSelectedItem();
-        Log.d("myapp","selected " + selectedTask.toString());
+        Log.d("contextItemSelected","selected " + selectedTask.toString());
 
         if(item.getItemId() == R.id.update) {
             doViewDetails(selectedTask);
@@ -116,11 +118,11 @@ public class AdminTaskView extends AppCompatActivity {
             Log.d("myapp","you clicked delete task context menu");
         }
 
-        return false;
-        //return super.onContextItemSelected(item);
+        return super.onContextItemSelected(item);
     }
 
     private void doViewDetails(Task selectedTask) {
+        Log.d("AdminTaskView","selectedTask Id: " + selectedTask.getJobid());
         Log.d("myapp","viewing details " + selectedTask.toString());
         Intent intent = new Intent(getApplicationContext(),UpdateTaskActivity.class);
         intent.putExtra("task_id", selectedTask.getJobid());
@@ -133,7 +135,7 @@ public class AdminTaskView extends AppCompatActivity {
     *
     * */
     private void doDeleteTask(Task selectedTask) {
-        Log.d("myapp","attempting to delete task ");
+        Log.d("myapp","attempting to delete task " + selectedTask.toString());
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
@@ -189,7 +191,7 @@ public class AdminTaskView extends AppCompatActivity {
                     List<Task> tasks = response.body();
 
                     // initialize adapter
-                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                    adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
                     // set adapter to the recyclerview
                     taskList.setAdapter(adapter);

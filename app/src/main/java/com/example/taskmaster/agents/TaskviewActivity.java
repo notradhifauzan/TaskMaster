@@ -83,9 +83,6 @@ public class TaskviewActivity extends AppCompatActivity {
                     // set layout to recycler view
                     taskList.setLayoutManager(new LinearLayoutManager(context));
                 }
-
-
-
             }
 
             @Override
@@ -148,13 +145,13 @@ public class TaskviewActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
         Task selectedTask = adapter.getSelectedItem();
-        //Log.d()
 
         if(item.getItemId() == R.id.details){
 
             doShowDetails(selectedTask);
         }
-        return true;
+
+        return super.onContextItemSelected(item);
     }
 
     private void doShowDetails(Task selectedTask) {
@@ -208,20 +205,6 @@ public class TaskviewActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         //do things
                         doLogout();
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    public void displayAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //do things
                         dialog.cancel();
                     }
                 });

@@ -21,8 +21,8 @@ public interface TaskService {
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);
 
-    @GET("jobs/?userid[in]=null")
-    Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
+    @POST("jobs/update/{id}")
+    Call<Task> updateTask(@Header("api-key") String api_key, @Path("id") int id, @Body Task task);
 
     @POST("jobs")
     Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);

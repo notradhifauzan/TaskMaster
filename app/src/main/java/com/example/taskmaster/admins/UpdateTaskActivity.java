@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -41,8 +42,12 @@ public class UpdateTaskActivity extends AppCompatActivity {
     int hours = calendar.get(Calendar.HOUR);
     int minutes = calendar.get(Calendar.MINUTE);
 
+    /*variables for job details input*/
     String selectedDueDate;
     String selectedDueTime;
+
+    String inputJobTitle,inputJobDomain,inputJobRequirements;
+    double inputJobBudget;
 
     // ---------------views variable-----------------------
     EditText edtJobTitle, edtJobDomain, edtJobRequirements,
@@ -84,9 +89,70 @@ public class UpdateTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getIntExtra("task_id", -1);
 
+        Log.d("myapp","current task id " + id);
+
         // load the task details
         loadTaskDetails(id);
 
+        // on submit button
+        taskSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get all field data
+                initializeVariables();
+
+                if(validateInput())
+                {
+                    Log.d("myApp:","input is validated!");
+                    task = new Task();
+                    initializeTaskObject(task);
+
+                    // debugging purpose
+                    Log.d("myApp: ",task.toString());
+
+                    // send POST request
+                    doUpdateTask(task);
+                }
+            }
+        });
+
+    }
+
+    private void doUpdateTask(Task task) {
+        // get user info from SharedPreferences
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+        taskService = ApiUtils.getTaskService();
+
+        taskService.updateTask(user.getToken(),task.getJobid(),task).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                Log.d("myapp: ","Trying to update job id: " + task.getJobid());
+                Log.d("MyApp:","Response: " + response.raw().toString());
+
+                if(response.code() == 401)
+                {
+                    // authorization problem, go to login
+                    displayToast("Something went wrong: " + response.code());
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
+                } else {
+                    if(response.code() == 201)
+                    {
+                        displayToast("Task updated successfully");
+                    } else {
+                        displayToast("Failed to update task: " + response.code());
+                        Log.e("error",response.raw().toString());
+                    }
+                    startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -175,6 +241,8 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 // get task object from response
                 task = response.body();
 
+                Log.d("myapp","viewing task: " + task.toString());
+
                 setViews(task);
             }
 
@@ -204,5 +272,68 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
 
         taskSubmit = findViewById(R.id.taskSubmitButton);
+    }
+
+    private void initializeTaskObject(Task task) {
+        task.setJob_title(inputJobTitle);
+        task.setJob_domain(inputJobDomain);
+        task.setRequirements(inputJobRequirements);
+        task.setBudget(inputJobBudget);
+        task.setDue_date(selectedDueDate);
+        task.setDue_time(selectedDueTime);
+    }
+
+    private void initializeVariables() {
+        inputJobTitle = edtJobTitle.getText().toString();
+        inputJobDomain = edtJobDomain.getText().toString();
+        inputJobRequirements = edtJobRequirements.getText().toString();
+
+        try {
+            inputJobBudget = Double.parseDouble(edtBudget.getText().toString());
+        } catch(NumberFormatException e) {
+            inputJobBudget = 0.00;
+        }
+    }
+
+    private boolean validateInput() {
+        if(inputJobTitle == null || inputJobTitle.trim().length() == 0)
+        {
+            displayToast("Job Title is required");
+            return false;
+        }
+
+        if(inputJobDomain == null || inputJobDomain.trim().length()==0)
+        {
+            displayToast("Job Domain is required");
+            return false;
+        }
+
+        if(inputJobRequirements == null || inputJobRequirements.trim().length()==0)
+        {
+            displayToast("Job Requirements is required");
+            return false;
+        }
+
+        if(inputJobBudget <=0 ){
+            displayToast("Job Budget is required");
+            return false;
+        }
+
+        if(selectedDueDate == null || selectedDueDate.length() == 0)
+        {
+            displayToast("Job due date is required");
+            return false;
+        }
+
+        if(selectedDueTime == null || selectedDueTime.length() == 0) {
+            displayToast("Job due time is required");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void displayToast(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 }

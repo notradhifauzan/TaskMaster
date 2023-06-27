@@ -49,6 +49,7 @@ public class AddTaskActivity extends AppCompatActivity {
     int hours = calendar.get(Calendar.HOUR);
     int minutes = calendar.get(Calendar.MINUTE);
 
+    /*variables for job details input*/
     String selectedDueDate;
     String selectedDueTime;
 
@@ -196,9 +197,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 {
                     // authorization problem, go to login
                     displayToast("Something went wrong: " + response.code());
-                    finish();
                     goToMainActivity();
-                    return;
+                    finish();
                 } else {
                     if(response.code() == 201)
                     {
@@ -301,7 +301,6 @@ public class AddTaskActivity extends AppCompatActivity {
         } catch(NumberFormatException e) {
             inputJobBudget = 0.00;
         }
-
     }
 
     private boolean validateInput() {
@@ -344,17 +343,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void displayToast(String message) {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
-    }
-
-    public void displaySnackbar(String message, boolean error) {
-        LinearLayout layout = findViewById(R.id.linearLayout);
-        Snackbar snackbar = Snackbar.make(layout, message,Snackbar.LENGTH_LONG);
-
-        // if error message, set snackBar color to red
-        if (error)
-            snackbar.setBackgroundTint(Color.RED);
-
-        snackbar.show();
     }
 
     private void findViews() {
