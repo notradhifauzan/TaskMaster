@@ -4,6 +4,8 @@
     <string name="report_bugs">report bugs</string>
     <string name="about">about</string>
     <string name="add_task">add task</string>
+    <string name="details">Details</string>
+    <string name="accept_task">Accept Task</string>
 
     <string-array name="taskTitle">
         <item>Futuristic City Modeling</item>

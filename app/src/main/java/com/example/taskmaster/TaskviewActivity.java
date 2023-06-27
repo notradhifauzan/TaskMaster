@@ -10,9 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.taskmaster.adapter.TaskAdapter;
@@ -42,7 +45,7 @@ public class TaskviewActivity extends AppCompatActivity {
 
         context = this; // get current activity context
 
-        // get reference to the RecyclerView tasklist
+        // get reference to the RecyclerView task-list
         taskList = findViewById(R.id.rvAvailableTask);
 
         // get user info from SharedPreferences
@@ -85,6 +88,10 @@ public class TaskviewActivity extends AppCompatActivity {
                 Log.e("MyApp:",t.getMessage());
             }
         });
+
+        //Najmu part
+        super.registerForContextMenu(taskList);
+        ////////////////////////////////////
     }
 
     private void goToActivity(Class<MainActivity> mainActivityClass) {
@@ -151,4 +158,37 @@ public class TaskviewActivity extends AppCompatActivity {
         finish();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
     }
+
+    //Najmu//////////////////////
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater= getMenuInflater();
+
+        inflater.inflate(R.menu.task_context_menu, menu);
+        menu.setHeaderTitle("Options:");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        // get selected menu item info
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        // get item position in the list
+        int pos = info.position;
+        if (item.getItemId() == R.id.details) {
+            // user clicked details context menu item
+            // prepare data to be sent
+/*            Intent intent = new Intent(getBaseContext(), ContactDetailsActivity.class);
+            // get the data from the array based on the item position/index
+            intent.putExtra("PROFILE_PIC", contactAdapter.getImages()[pos]);
+            intent.putExtra("NAME", contactAdapter.getNames()[pos]);
+            intent.putExtra("PHONE_NO", contactAdapter.getPhoneNos()[pos]);
+            // start the details activity
+            startActivity(intent);*/
+        }
+        return true;
+    }
+    /////////////////////////////
 }
