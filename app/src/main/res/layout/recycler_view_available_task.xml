@@ -10,6 +10,7 @@
         android:id="@+id/task_cardView"
         android:layout_width="match_parent"
         android:layout_height="200sp"
+        android:longClickable="true"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
