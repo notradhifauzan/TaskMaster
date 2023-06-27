@@ -53,7 +53,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-
         return taskModels.size();
     }
 

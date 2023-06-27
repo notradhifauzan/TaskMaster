@@ -41,11 +41,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="RM0000.00"
-                    app:layout_constraintStart_toStartOf="@+id/tvDesc"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
+                    app:layout_constraintStart_toStartOf="@+id/tvDomain"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDomain" />
 
                 <TextView
-                    android:id="@+id/tvDesc"
+                    android:id="@+id/tvDomain"
                     android:layout_width="274dp"
                     android:maxHeight="35sp"
                     android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                     android:text="Title"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/tvDesc"
+                    app:layout_constraintStart_toStartOf="@+id/tvDomain"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView

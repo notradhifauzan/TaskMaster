@@ -1,58 +1,75 @@
 package com.example.taskmaster.agents;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.widget.TextView;
-
 import com.example.taskmaster.R;
+import com.example.taskmaster.model.SharedPrefManager;
+import com.example.taskmaster.model.Task;
+import com.example.taskmaster.model.User;
+import com.example.taskmaster.remote.ApiUtils;
+import com.example.taskmaster.remote.TaskService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskDetailsActivity extends AppCompatActivity {
+
+    TaskService taskService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
 
-        //Start Pull Data
-        String  id = getIntent().getStringExtra("taskID");
-        TextView tvID = findViewById(R.id.tvID);
-        tvID.setText(id);
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("taskID", -1);
 
-        String  title = getIntent().getStringExtra("taskTitle");
-        TextView tvTitle = findViewById(R.id.tvTitle);
-        tvTitle.setText(title);
+        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser(); //token related
 
-        String  domain = getIntent().getStringExtra("taskDomain");
-        TextView tvDomain = findViewById(R.id.tvDomain);
-        tvDomain.setText(domain);
+        taskService = ApiUtils.getTaskService();
 
-        String  requirement = getIntent().getStringExtra("taskRequirement");
-        TextView tvRequirement = findViewById(R.id.tvRequirement);
-        tvRequirement.setText(requirement);
+        // execute the API query. send the token and book id
+        taskService.getTask(user.getToken(), id).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                Log.d("TaskMaster:", "Response: " + response.raw().toString());
 
-        String  created_at = getIntent().getStringExtra("taskCreated_at");
-        TextView tvCreated_at = findViewById(R.id.tvTitle);
-        tvCreated_at.setText(created_at);
+                Task task = response.body();
 
-        String  price = getIntent().getStringExtra("taskPrice");
-        TextView tvPrice = findViewById(R.id.tvPrice);
-        tvPrice.setText(price);
+                // get references to the view elements
+                TextView tvID = findViewById(R.id.tvID);
+                TextView tvTitle = findViewById(R.id.tvTitle);
+                TextView tvDomain = findViewById(R.id.tvDomain);
+                TextView tvRequirement = findViewById(R.id.tvRequirement);
+                TextView tvCreated_at = findViewById(R.id.tvTitle);
+                TextView tvPrice = findViewById(R.id.tvPrice);
+                TextView tvDate = findViewById(R.id.tvDate);
+                TextView tvTime = findViewById(R.id.tvTime);
+                TextView tvStatus = findViewById(R.id.tvTitle);
 
-        String  date = getIntent().getStringExtra("taskDate");
-        TextView tvDate = findViewById(R.id.tvDate);
-        tvDate.setText("Due: "+date);
+                //set values
+                //tvID.setText(task.get);
+                tvTitle.setText(task.getJob_title());
+                tvDomain.setText(task.getJob_domain());
+                tvRequirement.setText(task.getRequirements());
+                tvCreated_at.setText(task.getCreated_at());
+                tvPrice.setText(String.valueOf(task.getBudget()));
+                tvDate.setText("Due: " + task.getDue_date());
+                tvTime.setText(task.getDue_time());
+                tvStatus.setText(task.getStatus());
+            }
 
-        String  time = getIntent().getStringExtra("taskTime");
-        TextView tvTime = findViewById(R.id.tvTime);
-        tvTime.setText(time);
-
-        String  status = getIntent().getStringExtra("taskStatus");
-        TextView tvStatus = findViewById(R.id.tvTitle);
-        tvStatus.setText(status);
-
-        // end pull data
-
-
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+                Toast.makeText(null, "Error connecting", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

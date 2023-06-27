@@ -148,29 +148,21 @@ public class TaskviewActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
         Task selectedTask = adapter.getSelectedItem();
-        //Log.d()
+        Log.d("TaskMaster", "selected "+selectedTask.toString());
 
         if(item.getItemId() == R.id.details){
-
-            doShowDetails(selectedTask);
+            doViewDetails(selectedTask);
         }
         return true;
     }
 
-    private void doShowDetails(Task selectedTask) {
-        Intent intentsuccess = new Intent(this, TaskDetailsActivity.class);
-        Toast.makeText(getApplicationContext(),"Showing Details", Toast.LENGTH_SHORT).show();
-        intentsuccess.putExtra("taskID", selectedTask.getJobid());
-        intentsuccess.putExtra("taskTitle",selectedTask.getJob_title());
-        intentsuccess.putExtra("taskDomain",selectedTask.getJob_domain());
-        intentsuccess.putExtra("taskRequirement",selectedTask.getRequirements());
-        intentsuccess.putExtra("taskCreated_at",selectedTask.getCreated_at());
-        intentsuccess.putExtra("taskPrice",selectedTask.getBudget());
-        intentsuccess.putExtra("taskDate",selectedTask.getDue_date());
-        intentsuccess.putExtra("taskTime",selectedTask.getDue_time());
-        intentsuccess.putExtra("taskStatus",selectedTask.getStatus());
+    private void doViewDetails(Task selectedTask) {
 
-        startActivity(intentsuccess);
+        Log.d("TaskMaster", "selected "+selectedTask.toString());
+
+        Intent intentSuccess = new Intent(this, TaskDetailsActivity.class);
+        intentSuccess.putExtra("taskID", selectedTask.getJobid());
+        startActivity(intentSuccess);
     }
 
     @Override
