@@ -61,7 +61,7 @@ public class TaskviewActivity extends AppCompatActivity {
         taskService = ApiUtils.getTaskService();
 
         // execute the call. send the user token when sending the query
-        taskService.getAllTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+        taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 // for debug purpose

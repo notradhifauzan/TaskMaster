@@ -18,6 +18,9 @@ public interface TaskService {
     @GET("jobs/?order=created_at&orderType=desc")
     Call<List<Task>> getAllTask(@Header("api-key") String api_key);
 
+    @GET("jobs/unassigned")
+    Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
+
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);
 
