@@ -48,22 +48,22 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 TextView tvTitle = findViewById(R.id.tvTitle);
                 TextView tvDomain = findViewById(R.id.tvDomain);
                 TextView tvRequirement = findViewById(R.id.tvRequirement);
-                TextView tvCreated_at = findViewById(R.id.tvTitle);
+                TextView tvCreated_at = findViewById(R.id.tvCreated_at);
                 TextView tvPrice = findViewById(R.id.tvPrice);
                 TextView tvDate = findViewById(R.id.tvDate);
                 TextView tvTime = findViewById(R.id.tvTime);
-                TextView tvStatus = findViewById(R.id.tvTitle);
+                //TextView tvStatus = findViewById(R.id.tvStatus);
 
                 //set values
-                //tvID.setText(task.get);
-                tvTitle.setText(task.getJob_title());
+                tvID.setText("ID: "+task.getJobid());
+                tvTitle.setText(String.valueOf(task.getJob_title()));
                 tvDomain.setText(task.getJob_domain());
                 tvRequirement.setText(task.getRequirements());
                 tvCreated_at.setText(task.getCreated_at());
                 tvPrice.setText(String.valueOf(task.getBudget()));
                 tvDate.setText("Due: " + task.getDue_date());
                 tvTime.setText(task.getDue_time());
-                tvStatus.setText(task.getStatus());
+                //tvStatus.setText(task.getStatus());
             }
 
             @Override

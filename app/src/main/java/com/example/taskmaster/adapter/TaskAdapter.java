@@ -1,67 +1,64 @@
 package com.example.taskmaster.adapter;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.ContentInfo;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmaster.R;
 import com.example.taskmaster.model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
-
-    //setup 2 variable here
-    Context context;
-    ArrayList<Task> taskModels;
-    private int currentPos;
-
-    public TaskAdapter (Context context, ArrayList<Task> taskModels){
-        this.context = context;
-        this.taskModels = taskModels;
-    }
-
-    @NonNull
     @Override
-    public TaskAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recycler_view_available_task, parent, false);
 
-        return new TaskAdapter.MyViewHolder(view);
+        // inflate the single item layout
+        View view = inflater.inflate(R.layout.rv_admin_taskview,parent,false);
+
+        // return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
+    }
+
+    public Task getSelectedItem() {
+        if(currentPos >=0 && taskList!=null && currentPos<taskList.size()) {
+            return taskList.get(currentPos);
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TaskAdapter.MyViewHolder holder, int position) {
-
-        holder.tvTitle.setText(taskModels.get(position).getJob_title());
-        holder.tvDomain.setText(taskModels.get(position).getJob_domain());
-        holder.tvPrice.setText( "RM "+taskModels.get(position).getBudget());
-        holder.tvDate.setText(taskModels.get(position).getDue_date());
-        holder.tvTime.setText(taskModels.get(position).getDue_time());
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // bind data to the view holder
+        Task t = taskList.get(position);
+        holder.tvTime.setText(t.getDue_time());
+        holder.tvDate.setText(t.getDue_date());
+        holder.tvDomain.setText(t.getJob_domain());
+        holder.tvPrice.setText(String.valueOf(t.getBudget()));
+        holder.tvTitle.setText(t.getJob_title());
     }
 
     @Override
     public int getItemCount() {
-        return taskModels.size();
+        return taskList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        //Act like OnCreate method
-        TextView tvTitle, tvDomain, tvPrice, tvDate, tvTime ;
-        CardView cv;
-        public MyViewHolder(@NonNull View itemView) {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+        public TextView tvTitle;
+        public TextView tvDomain;
+        public TextView tvPrice;
+        public TextView tvDate;
+        public TextView tvTime;
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
@@ -69,7 +66,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
-            cv = itemView.findViewById(R.id.task_cardView);
 
             itemView.setOnLongClickListener(this);
         }
@@ -81,10 +77,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         }
     }
 
-    public Task getSelectedItem() {
-        if(currentPos >= 0 && taskModels!=null && currentPos<taskModels.size()) {
-            return taskModels.get(currentPos);
-        }
-        return null;
+    private List<Task> taskList;
+    private Context context;
+    private int currentPos;
+
+    public TaskAdapter(Context context,List<Task> listData) {
+        taskList = listData;
+        this.context = context;
     }
+
+    private Context getContext() {return context;}
+
+
 }

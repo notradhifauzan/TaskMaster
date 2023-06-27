@@ -48,7 +48,7 @@ public class TaskviewActivity extends AppCompatActivity {
 
         context = this; // get current activity context
 
-        // get reference to the RecyclerView tasklist
+        // get reference to the RecyclerView task-list
         taskList = findViewById(R.id.rvAvailableTask);
 
         // register the taskList recycler view for context menu

@@ -42,7 +42,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         Task t = taskList.get(position);
         holder.tvTime.setText(t.getDue_time());
         holder.tvDate.setText(t.getDue_date());
-        //holder.tvDomain.setText(t.getJob_domain());
+        holder.tvDomain.setText(t.getJob_domain());
         holder.tvPrice.setText(String.valueOf(t.getBudget()));
         holder.tvTitle.setText(t.getJob_title());
     }
@@ -62,7 +62,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            //tvDomain = itemView.findViewById(R.id.tvDomain);
+            tvDomain = itemView.findViewById(R.id.tvDomain);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
