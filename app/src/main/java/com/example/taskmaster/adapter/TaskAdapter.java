@@ -45,7 +45,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull TaskAdapter.MyViewHolder holder, int position) {
 
         holder.tvTitle.setText(taskModels.get(position).getJob_title());
-        holder.tvDesc.setText(taskModels.get(position).getJob_domain());
+        holder.tvDomain.setText(taskModels.get(position).getJob_domain());
         holder.tvPrice.setText( "RM "+taskModels.get(position).getBudget());
         holder.tvDate.setText(taskModels.get(position).getDue_date());
         holder.tvTime.setText(taskModels.get(position).getDue_time());
@@ -59,13 +59,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         //Act like OnCreate method
-        TextView tvTitle, tvDesc, tvPrice, tvDate, tvTime ;
+        TextView tvTitle, tvDomain, tvPrice, tvDate, tvTime ;
         CardView cv;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDesc = itemView.findViewById(R.id.tvDesc);
+            tvDomain = itemView.findViewById(R.id.tvDomain);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);

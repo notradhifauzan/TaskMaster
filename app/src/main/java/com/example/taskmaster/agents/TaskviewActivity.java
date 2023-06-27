@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.admins.UpdateTaskActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -145,14 +146,31 @@ public class TaskviewActivity extends AppCompatActivity {
     }
 
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        super.onContextItemSelected(item);
-        switch(item.getItemId())
-        {
-            case 101: Log.d("myApp","You clicked pos.no " + adapter.getItemId(1));
-                return true;
-            default: break;
+
+        Task selectedTask = adapter.getSelectedItem();
+        //Log.d()
+
+        if(item.getItemId() == R.id.details){
+
+            doShowDetails(selectedTask);
         }
-        return false;
+        return true;
+    }
+
+    private void doShowDetails(Task selectedTask) {
+        Intent intentsuccess = new Intent(this, TaskDetailsActivity.class);
+        Toast.makeText(getApplicationContext(),"Showing Details", Toast.LENGTH_SHORT).show();
+        intentsuccess.putExtra("taskID", selectedTask.getJobid());
+        intentsuccess.putExtra("taskTitle",selectedTask.getJob_title());
+        intentsuccess.putExtra("taskDomain",selectedTask.getJob_domain());
+        intentsuccess.putExtra("taskRequirement",selectedTask.getRequirements());
+        intentsuccess.putExtra("taskCreated_at",selectedTask.getCreated_at());
+        intentsuccess.putExtra("taskPrice",selectedTask.getBudget());
+        intentsuccess.putExtra("taskDate",selectedTask.getDue_date());
+        intentsuccess.putExtra("taskTime",selectedTask.getDue_time());
+        intentsuccess.putExtra("taskStatus",selectedTask.getStatus());
+
+        startActivity(intentsuccess);
     }
 
     @Override
@@ -166,8 +184,9 @@ public class TaskviewActivity extends AppCompatActivity {
         inflater.inflate(R.menu.task_context_menu, menu);
 
         // set menu title - optional
-        menu.setHeaderTitle("Select the action:");
+        menu.setHeaderTitle("Options");
     }
+
 
     private void doLogout() {
         // clear the shared preferences
