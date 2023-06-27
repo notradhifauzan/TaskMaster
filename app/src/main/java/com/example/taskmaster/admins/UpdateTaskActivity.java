@@ -243,6 +243,9 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 // get task object from response
                 task = response.body();
 
+                selectedDueDate = task.getDue_date();
+                selectedDueTime = task.getDue_time();
+
                 Log.d("myapp","viewing task: " + task.toString());
 
                 setViews(task);
