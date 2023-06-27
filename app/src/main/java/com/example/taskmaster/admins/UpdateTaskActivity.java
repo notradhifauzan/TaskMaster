@@ -104,7 +104,6 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 if(validateInput())
                 {
                     Log.d("myApp:","input is validated!");
-                    task = new Task();
                     initializeTaskObject(task);
 
                     // debugging purpose
@@ -123,7 +122,10 @@ public class UpdateTaskActivity extends AppCompatActivity {
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
 
-        taskService.updateTask(user.getToken(),task.getJobid(),task).enqueue(new Callback<Task>() {
+        taskService.updateTask(user.getToken(),task.getJobid(),task.getJob_title(),
+                task.getJob_domain(),task.getRequirements(),task.getBudget(),
+                task.getCreated_at(),task.getDue_date(),
+                task.getDue_time(),task.getStatus()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
                 Log.d("myapp: ","Trying to update job id: " + task.getJobid());
@@ -136,12 +138,12 @@ public class UpdateTaskActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 } else {
-                    if(response.code() == 201)
+                    if(response.code() == 200)
                     {
                         displayToast("Task updated successfully");
                     } else {
                         displayToast("Failed to update task: " + response.code());
-                        Log.e("error",response.raw().toString());
+                        Log.e("update task error",response.raw().toString());
                     }
                     startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
                     finish();
@@ -150,7 +152,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
-
+                displayToast("Couldn't connect to server");
             }
         });
     }

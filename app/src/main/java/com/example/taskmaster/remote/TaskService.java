@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -24,8 +25,13 @@ public interface TaskService {
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);
 
+    @FormUrlEncoded
     @POST("jobs/update/{id}")
-    Call<Task> updateTask(@Header("api-key") String api_key, @Path("id") int id, @Body Task task);
+    Call<Task> updateTask(@Header("api-key") String api_key, @Path("id") int id,
+                          @Field("job_title") String title, @Field("job_domain") String job_domain,
+                          @Field("requirements") String requirements, @Field("budget") double budget,
+                          @Field("created_at") String created_at, @Field("due_date") String due_date,
+                          @Field("due_time") String due_time, @Field("status") String status);
 
     @POST("jobs")
     Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);
