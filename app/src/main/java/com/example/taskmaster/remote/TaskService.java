@@ -13,6 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface TaskService {
 
@@ -21,6 +22,9 @@ public interface TaskService {
 
     @GET("jobs/unassigned")
     Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
+
+    @GET("jobs/")
+    Call<List<Task>> getMyTask(@Header("api-key") String api_key,@Query("userid[in]") int id);
 
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);

@@ -1,6 +1,5 @@
 package com.example.taskmaster.agents;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,17 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.adapter.TaskAdapter;
-import com.example.taskmaster.admins.UpdateTaskActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -35,8 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TaskviewActivity extends AppCompatActivity {
-
+public class MyTaskActivity extends AppCompatActivity {
     TaskService taskService;
     Context context;
     RecyclerView taskList;
@@ -44,7 +37,10 @@ public class TaskviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_taskview);
+        setContentView(R.layout.activity_my_task);
+
+        // enable back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = this; // get current activity context
 
@@ -54,14 +50,17 @@ public class TaskviewActivity extends AppCompatActivity {
         // register the taskList recycler view for context menu
         super.registerForContextMenu(taskList);
 
+        loadTask();
+    }
+
+    private void loadTask() {
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
-        // execute the call. send the user token when sending the query
-        taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+        taskService.getMyTask(user.getToken(),user.getId()).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 // for debug purpose
@@ -87,33 +86,9 @@ public class TaskviewActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
+
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // get the menu inflater
-        MenuInflater inflater = super.getMenuInflater();
-
-        // inflate the menu using our XML menu file id, options_menu
-        inflater.inflate(R.menu.options_menu,menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == R.id.logout) {
-            logoutDialogbox();
-            return true;
-        }
-        else if(item.getItemId() == R.id.mytask) {
-            startActivity(new Intent(getApplicationContext(),MyTaskActivity.class));
-        }
-        return false;
     }
 
     private void logoutDialogbox() {
@@ -144,59 +119,19 @@ public class TaskviewActivity extends AppCompatActivity {
 
     }
 
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        Task selectedTask = adapter.getSelectedItem();
-
-        if(item.getItemId() == R.id.details){
-
-            doShowDetails(selectedTask);
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.logout)
+        {
+            logoutDialogbox();
+            return true;
         }
 
-        return super.onContextItemSelected(item);
-    }
-
-    private void doShowDetails(Task selectedTask) {
-        Intent intentsuccess = new Intent(this, TaskDetailsActivity.class);
-        Toast.makeText(getApplicationContext(),"Showing Details", Toast.LENGTH_SHORT).show();
-        intentsuccess.putExtra("taskID", selectedTask.getJobid());
-        intentsuccess.putExtra("taskTitle",selectedTask.getJob_title());
-        intentsuccess.putExtra("taskDomain",selectedTask.getJob_domain());
-        intentsuccess.putExtra("taskRequirement",selectedTask.getRequirements());
-        intentsuccess.putExtra("taskCreated_at",selectedTask.getCreated_at());
-        intentsuccess.putExtra("taskPrice",selectedTask.getBudget());
-        intentsuccess.putExtra("taskDate",selectedTask.getDue_date());
-        intentsuccess.putExtra("taskTime",selectedTask.getDue_time());
-        intentsuccess.putExtra("taskStatus",selectedTask.getStatus());
-
-        startActivity(intentsuccess);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        // call the original method in superclass
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-
-        // use our XML file for the menu items
-        inflater.inflate(R.menu.task_context_menu, menu);
-
-        // set menu title - optional
-        menu.setHeaderTitle("Options");
-    }
-
-
-    private void doLogout() {
-        // clear the shared preferences
-        SharedPrefManager.getInstance(getApplicationContext()).logout();
-
-        // display message
-        Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
-
-        // forward to MainActivity
-        finish();
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
+        }
+        return false;
     }
 
     public void logoutAlert(String message) {
@@ -212,5 +147,17 @@ public class TaskviewActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void doLogout() {
+        // clear the shared preferences
+        SharedPrefManager.getInstance(getApplicationContext()).logout();
+
+        // display message
+        Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
+
+        // forward to MainActivity
+        finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

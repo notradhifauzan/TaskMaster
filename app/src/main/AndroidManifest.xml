@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskMaster"
         tools:targetApi="31">
-
+        <activity
+            android:name=".agents.MyTaskActivity"
+            android:exported="false" />
         <activity
             android:name=".admins.UpdateTaskActivity"
             android:exported="false" />
@@ -30,7 +32,6 @@
         <activity
             android:name=".agents.TaskDetailsActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

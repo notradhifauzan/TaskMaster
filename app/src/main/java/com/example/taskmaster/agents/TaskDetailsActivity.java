@@ -128,7 +128,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         taskService.acceptTask(user.getToken(),task.getJobid(),task.getJob_title(),
                 task.getJob_domain(),task.getRequirements(),task.getBudget(),
                 task.getCreated_at(),task.getDue_date(),
-                task.getDue_time(),task.getStatus(),user.getId()).enqueue(new Callback<Task>() {
+                task.getDue_time(),"assigned",user.getId()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
                 Log.d("myapp: ","Trying to update job id: " + task.getJobid());
