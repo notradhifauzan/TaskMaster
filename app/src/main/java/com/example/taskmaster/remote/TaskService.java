@@ -33,6 +33,14 @@ public interface TaskService {
                           @Field("created_at") String created_at, @Field("due_date") String due_date,
                           @Field("due_time") String due_time, @Field("status") String status);
 
+    @FormUrlEncoded
+    @POST("jobs/update/{id}")
+    Call<Task> acceptTask(@Header("api-key") String api_key, @Path("id") int id,
+                          @Field("job_title") String title, @Field("job_domain") String job_domain,
+                          @Field("requirements") String requirements, @Field("budget") double budget,
+                          @Field("created_at") String created_at, @Field("due_date") String due_date,
+                          @Field("due_time") String due_time, @Field("status") String status, @Field("userid") int userid);
+
     @POST("jobs")
     Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);
 
