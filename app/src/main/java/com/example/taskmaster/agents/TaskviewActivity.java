@@ -119,9 +119,6 @@ public class TaskviewActivity extends AppCompatActivity {
             logoutDialogbox();
             return true;
         }
-        else if(item.getItemId() == R.id.mytask) {
-            startActivity(new Intent(getApplicationContext(),MyTaskActivity.class));
-        }
         return false;
     }
 
@@ -160,19 +157,8 @@ public class TaskviewActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.details){
 
             doShowDetails(selectedTask);
-        } else if (item.getItemId() == R.id.botNavBar) {
-
-            showBottomNavBar();
-
         }
-
         return super.onContextItemSelected(item);
-    }
-
-    public void showBottomNavBar(){
-        Intent intentsuccess = new Intent(this, BottomNavBar.class);
-        startActivity(intentsuccess);
-
     }
 
     private void doShowDetails(Task selectedTask) {

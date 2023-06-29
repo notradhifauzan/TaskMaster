@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,20 +121,12 @@ public class AvailableTaskFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-
         Task selectedTask = adapter.getSelectedItem();
-
         if(item.getItemId() == R.id.details){
 
             doShowDetails(selectedTask);
-        } else if (item.getItemId() == R.id.botNavBar) {
-
-            showBottomNavBar();
-
         }
-
         return super.onContextItemSelected(item);
-
    /*     TaskAdapter.RecyclerViewContextMenuInfo info = (TaskAdapter.RecyclerViewContextMenuInfo) item.getMenuInfo();
         Task selectedTask = adapter.getItem(info.position);
 

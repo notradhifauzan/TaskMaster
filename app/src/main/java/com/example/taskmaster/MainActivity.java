@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BottomNavBar.class));
                 finish();
             }
-
             return;
         }
 
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToTaskView() {
-        Intent intent = new Intent(this, TaskviewActivity.class);
+        Intent intent = new Intent(this, BottomNavBar.class);
         startActivity(intent);
         finish();
     }

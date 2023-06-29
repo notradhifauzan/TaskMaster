@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- On action bar -->
     <!-- Overflow menu. No need for icon -->
-
-    <item
-        android:id="@+id/mytask"
-        android:title="My Task"
-        />
     <item
         android:id="@+id/logout"
         android:title="Logout"

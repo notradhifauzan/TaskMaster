@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +19,8 @@ import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.admins.AddTaskActivity;
 import com.example.taskmaster.admins.AdminTaskView;
+import com.example.taskmaster.fragments.BottomNavBar;
+import com.example.taskmaster.fragments.MyTaskFragment;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -34,6 +39,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
+
+        // enable back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("taskID", -1);
@@ -87,6 +95,68 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 acceptTaskDialogBox(id);
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // get the menu inflater
+        MenuInflater inflater = super.getMenuInflater();
+
+        // inflate the menu using our XML menu file id, options_menu
+        inflater.inflate(R.menu.options_menu,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.logout) {
+            logoutDialogbox();
+            return true;
+        } else if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
+    }
+
+    private void logoutDialogbox() {
+        // prepare a dialog box with yes and no
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Log out from the app?");
+
+        // prepare action listener for each button
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doLogout();
+                    }
+                });
+        builder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                });
+
+        // create the alert dialog and show to the user
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void doLogout() {
+        // clear the shared preferences
+        SharedPrefManager.getInstance(getApplicationContext()).logout();
+
+        // display message
+        Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
+
+        // forward to MainActivity
+        finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     private void acceptTaskDialogBox(int id) {
@@ -148,7 +218,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                         displayToast("Failed to accept task: " + response.code());
                         Log.e("accept task error",response.raw().toString());
                     }
-                    startActivity(new Intent(getApplicationContext(), TaskviewActivity.class));
+                    startActivity(new Intent(getApplicationContext(), BottomNavBar.class));
                     finish();
                 }
             }
