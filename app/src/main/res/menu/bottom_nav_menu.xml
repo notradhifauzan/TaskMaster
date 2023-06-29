@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Available Task"
+        android:id="@+id/navAvailableTask"
+        android:icon="@drawable/task_available_icon"/>
+
+    <item android:title="My Task"
+        android:id="@+id/navMyTask"
+        android:icon="@drawable/my_task_icon"/>
+    <item android:title="Preference"
+        android:id="@+id/navPreference"
+        android:icon="@drawable/preference_icon"/>
+
+</menu>

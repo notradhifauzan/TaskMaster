@@ -3,4 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mainColor">#8692f7</color>
+    <color name="PowderBlue">#A9B3F9</color>
+    <color name="AntiFlashWhite">#F0F0F0</color>
+    <color name="MediumSlateBlue">#6871EB</color>
+    <color name="TaupeGray">#929192</color>
 </resources>

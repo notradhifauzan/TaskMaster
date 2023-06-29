@@ -22,6 +22,7 @@ import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.adapter.TaskAdapter;
 import com.example.taskmaster.admins.UpdateTaskActivity;
+import com.example.taskmaster.fragments.BottomNavBar;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -149,23 +150,26 @@ public class TaskviewActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.details){
 
             doShowDetails(selectedTask);
+        } else if (item.getItemId() == R.id.botNavBar) {
+
+            showBottomNavBar();
+
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    public void showBottomNavBar(){
+        Intent intentsuccess = new Intent(this, BottomNavBar.class);
+        startActivity(intentsuccess);
+
     }
 
     private void doShowDetails(Task selectedTask) {
         Intent intentsuccess = new Intent(this, TaskDetailsActivity.class);
         Toast.makeText(getApplicationContext(),"Showing Details", Toast.LENGTH_SHORT).show();
         intentsuccess.putExtra("taskID", selectedTask.getJobid());
-        intentsuccess.putExtra("taskTitle",selectedTask.getJob_title());
-        intentsuccess.putExtra("taskDomain",selectedTask.getJob_domain());
-        intentsuccess.putExtra("taskRequirement",selectedTask.getRequirements());
-        intentsuccess.putExtra("taskCreated_at",selectedTask.getCreated_at());
-        intentsuccess.putExtra("taskPrice",selectedTask.getBudget());
-        intentsuccess.putExtra("taskDate",selectedTask.getDue_date());
-        intentsuccess.putExtra("taskTime",selectedTask.getDue_time());
-        intentsuccess.putExtra("taskStatus",selectedTask.getStatus());
+
 
         startActivity(intentsuccess);
     }
