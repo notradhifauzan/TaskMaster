@@ -102,6 +102,9 @@ public class MyTaskFragment extends Fragment {
 
         return view;
     }
+    private void displayToast(String message) {
+        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show();
+    }
 
     private void loadTask() {
         // get user info from SharedPreferences
@@ -120,17 +123,22 @@ public class MyTaskFragment extends Fragment {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
                 } else {
-                    // get list of task object from response
-                    List<Task> tasks = response.body();
+                    if(response.code() == 204) {
+                        // no task yet for this particular user
+                        displayToast("No task yet...");
+                    } else {
+                        // get list of task object from response
+                        List<Task> tasks = response.body();
 
-                    // initialize adapter
-                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                        // initialize adapter
+                        adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
 
-                    // set adapter to the recyclerview
-                    taskList.setAdapter(adapter);
+                        // set adapter to the recyclerview
+                        taskList.setAdapter(adapter);
 
-                    // set layout to recycler view
-                    taskList.setLayoutManager(new LinearLayoutManager(context));
+                        // set layout to recycler view
+                        taskList.setLayoutManager(new LinearLayoutManager(context));
+                    }
                 }
             }
 
