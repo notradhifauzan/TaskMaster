@@ -127,18 +127,7 @@ public class AvailableTaskFragment extends Fragment {
             doShowDetails(selectedTask);
         }
         return super.onContextItemSelected(item);
-   /*     TaskAdapter.RecyclerViewContextMenuInfo info = (TaskAdapter.RecyclerViewContextMenuInfo) item.getMenuInfo();
-        Task selectedTask = adapter.getItem(info.position);
 
-        if (item.getItemId() == R.id.details) {
-            doShowDetails(selectedTask);
-            return true;
-        } else if (item.getItemId() == R.id.botNavBar) {
-            showBottomNavBar();
-            return true;
-        }
-
-        return super.onContextItemSelected(item);*/
     }
 
     private void doShowDetails(Task selectedTask) {

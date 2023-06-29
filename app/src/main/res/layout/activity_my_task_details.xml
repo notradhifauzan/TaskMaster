@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10sp"
-    tools:context=".agents.TaskDetailsActivity">
+    tools:context=".agents.MyTaskDetailsActivity">
 
     <TextView
         android:id="@+id/tvID"
@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Accept Task"
+        android:text="Task Complete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

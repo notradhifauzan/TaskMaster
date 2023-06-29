@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.agents.MyTaskDetailsActivity;
+import com.example.taskmaster.agents.TaskDetailsActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -95,6 +99,42 @@ public class MyTaskFragment extends Fragment {
         // get reference to the RecyclerView task-list
         taskList = view.findViewById(R.id.rvAvailableTask);
 
+        User user = SharedPrefManager.getInstance(requireContext()).getUser();
+
+        // get task service instance
+        taskService = ApiUtils.getTaskService();
+
+        taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                // for debug purpose
+                Log.d("MyApp","Response: " + response.raw().toString());
+
+                if(response.code() == 401) {
+                    // authorization problem, go to login
+                    logoutAlert("Session expired");
+                } else {
+                    // get list of task objects from response
+                    List<Task> tasks = response.body();
+
+                    // initialize adapter
+                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+
+                    // set adapter to the recyclerview
+                    taskList.setAdapter(adapter);
+
+                    // set layout to recycler view
+                    taskList.setLayoutManager(new LinearLayoutManager(context));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:",t.getMessage());
+            }
+        });
+
         // register the taskList recycler view for context menu
         super.registerForContextMenu(taskList);
 
@@ -102,6 +142,35 @@ public class MyTaskFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @NonNull ContextMenu.ContextMenuInfo menuInfo) {
+        // call the original method in superclass
+        super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.task_context_menu, menu);
+
+        // set menu title - optional
+        menu.setHeaderTitle("Options");
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        Task selectedTask = adapter.getSelectedItem();
+        if(item.getItemId() == R.id.details){
+
+            doShowDetails(selectedTask);
+        }
+        return super.onContextItemSelected(item);
+
+    }
+
+    private void doShowDetails(Task selectedTask) {
+        Intent intent = new Intent(requireContext(), MyTaskDetailsActivity.class);
+        Toast.makeText(requireContext(), "Showing Details", Toast.LENGTH_SHORT).show();
+        intent.putExtra("taskID", selectedTask.getJobid());
+        startActivity(intent);
+    }
+
     private void displayToast(String message) {
         Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show();
     }

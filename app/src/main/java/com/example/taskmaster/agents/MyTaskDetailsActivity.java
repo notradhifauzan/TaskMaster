@@ -28,14 +28,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TaskDetailsActivity extends AppCompatActivity {
+public class MyTaskDetailsActivity extends AppCompatActivity {
 
     TaskService taskService;
     Task task;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_details);
+        setContentView(R.layout.activity_my_task_details);
 
         // enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,14 +84,15 @@ public class TaskDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button acceptButton = findViewById(R.id.btnCompleteTask);
+        Button CompleteButton = findViewById(R.id.btnCompleteTask);
 
-        acceptButton.setOnClickListener(new View.OnClickListener() {
+        // Complete Task Button
+/*        CompleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 acceptTaskDialogBox(id);
             }
-        });
+        });*/
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
