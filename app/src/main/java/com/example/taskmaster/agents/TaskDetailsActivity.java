@@ -84,7 +84,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button acceptButton = findViewById(R.id.btnCompleteTask);
+        Button acceptButton = findViewById(R.id.btnAcceptTask);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
