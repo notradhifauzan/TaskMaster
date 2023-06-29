@@ -4,10 +4,13 @@
     <!-- On action bar -->
     <!-- Overflow menu. No need for icon -->
 
-
+    <item
+        android:id="@+id/mytask"
+        android:title="My Task"
+        />
     <item
         android:id="@+id/logout"
-        android:title="@string/logout"
+        android:title="Logout"
         android:icon="@drawable/baseline_logout_24"
         />
     <item android:id="@+id/report_bugs"

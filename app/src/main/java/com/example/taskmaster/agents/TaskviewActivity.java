@@ -107,10 +107,12 @@ public class TaskviewActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == R.id.logout)
-        {
+        if(item.getItemId() == R.id.logout) {
             logoutDialogbox();
             return true;
+        }
+        else if(item.getItemId() == R.id.mytask) {
+            startActivity(new Intent(getApplicationContext(),MyTaskActivity.class));
         }
         return false;
     }

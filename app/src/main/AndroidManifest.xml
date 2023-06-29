@@ -35,6 +35,7 @@
         <activity
             android:name=".agents.TaskDetailsActivity"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
