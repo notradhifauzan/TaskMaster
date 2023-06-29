@@ -1,6 +1,8 @@
 package com.example.taskmaster.admins;
 
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -8,7 +10,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,7 +29,6 @@ import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
 import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.TaskService;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 
@@ -38,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddTaskActivity extends AppCompatActivity {
-
+    private NotificationManagerCompat notificationManager;
     // DatePickerDialog variables
     Calendar calendar = Calendar.getInstance();
     int year = calendar.get(Calendar.YEAR);
@@ -53,22 +52,24 @@ public class AddTaskActivity extends AppCompatActivity {
     String selectedDueDate;
     String selectedDueTime;
 
-    String inputJobTitle,inputJobDomain,inputJobRequirements;
+    String inputJobTitle, inputJobDomain, inputJobRequirements;
     double inputJobBudget;
 
 
     EditText edtJobTitle, edtJobDomain, edtJobRequirements,
-                edtBudget,edtDueDate,edtDueTime;
+            edtBudget, edtDueDate, edtDueTime;
     Button taskSubmit;
 
     Task task;
 
     TaskService taskService;
     Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        notificationManager = NotificationManagerCompat.from(this);
 
         findViews();
 
@@ -100,17 +101,16 @@ public class AddTaskActivity extends AppCompatActivity {
                 // get all field data
                 initializeVariables();
 
-                if(validateInput())
-                {
-                    Log.d("myApp:","input is validated!");
+                if (validateInput()) {
+                    Log.d("myApp:", "input is validated!");
                     task = new Task();
                     initializeTaskObject(task);
 
                     // debugging purpose
-                    Log.d("myApp: ",task.toString());
+                    Log.d("myApp: ", task.toString());
 
                     // send POST request
-                    sendPOSTrequest(task);
+                    doAddTask(task);
                 }
             }
         });
@@ -123,21 +123,19 @@ public class AddTaskActivity extends AppCompatActivity {
         MenuInflater inflater = super.getMenuInflater();
 
         // inflate the menu using our XML menu file id, options_menu
-        inflater.inflate(R.menu.options_menu,menu);
+        inflater.inflate(R.menu.options_menu, menu);
 
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == R.id.logout)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
             logoutDialogbox();
             return true;
         }
 
-        if(item.getItemId() == android.R.id.home)
-        {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -177,32 +175,32 @@ public class AddTaskActivity extends AppCompatActivity {
         SharedPrefManager.getInstance(getApplicationContext()).logout();
 
         // display message
-        Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "You have successfully logged out", Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
-    private void sendPOSTrequest(Task task) {
+    private void doAddTask(Task task) {
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
-        taskService.createTask(user.getToken(),task).enqueue(new Callback<Task>() {
+        taskService.createTask(user.getToken(), task).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
-                Log.d("MyApp:","Response: " + response.raw().toString());
+                Log.d("MyApp:", "Response: " + response.raw().toString());
 
-                if(response.code() == 401)
-                {
+                if (response.code() == 401) {
                     // authorization problem, go to login
                     displayToast("Something went wrong: " + response.code());
                     goToMainActivity();
                     finish();
                 } else {
-                    if(response.code() == 201)
-                    {
+                    if (response.code() == 201) {
                         displayToast("Task created successfully");
+                        Task createdTask = response.body();
+                        sendNotification(createdTask);
                     } else {
                         displayToast("Failed to create new task: " + response.code());
                     }
@@ -213,10 +211,14 @@ public class AddTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
+                Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:", t.getMessage());
             }
         });
+    }
+
+    private void sendNotification(Task createdTask) {
+
     }
 
     private void goToMainActivity() {
@@ -228,23 +230,21 @@ public class AddTaskActivity extends AppCompatActivity {
         TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                String hourStr="", minuteStr = "";
-                if(hours<10)
-                {
+                String hourStr = "", minuteStr = "";
+                if (hours < 10) {
                     hourStr = "0" + hours;
-                } else{
+                } else {
                     hourStr = String.valueOf(hours);
                 }
 
-                if(minutes<10)
-                {
+                if (minutes < 10) {
                     minuteStr = "0" + minutes;
                 } else {
                     minuteStr = String.valueOf(minutes);
                 }
 
-                edtDueTime.setText(hourStr+":"+minuteStr+":"+"00");
-                selectedDueTime = hourStr+":"+minuteStr+":"+"00";
+                edtDueTime.setText(hourStr + ":" + minuteStr + ":" + "00");
+                selectedDueTime = hourStr + ":" + minuteStr + ":" + "00";
             }
         }, hours, minutes, true);
 
@@ -255,18 +255,16 @@ public class AddTaskActivity extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                month = month+1;
-                String dayStr = "", monthStr="";
+                month = month + 1;
+                String dayStr = "", monthStr = "";
 
-                if(dayOfMonth<10)
-                {
+                if (dayOfMonth < 10) {
                     dayStr = "0" + dayOfMonth;
                 } else {
                     dayStr = String.valueOf(dayOfMonth);
                 }
 
-                if(month<10)
-                {
+                if (month < 10) {
                     monthStr = "0" + month;
                 } else {
                     monthStr = String.valueOf(month);
@@ -298,42 +296,38 @@ public class AddTaskActivity extends AppCompatActivity {
 
         try {
             inputJobBudget = Double.parseDouble(edtBudget.getText().toString());
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             inputJobBudget = 0.00;
         }
     }
 
     private boolean validateInput() {
-        if(inputJobTitle == null || inputJobTitle.trim().length() == 0)
-        {
+        if (inputJobTitle == null || inputJobTitle.trim().length() == 0) {
             displayToast("Job Title is required");
             return false;
         }
 
-        if(inputJobDomain == null || inputJobDomain.trim().length()==0)
-        {
+        if (inputJobDomain == null || inputJobDomain.trim().length() == 0) {
             displayToast("Job Domain is required");
             return false;
         }
 
-        if(inputJobRequirements == null || inputJobRequirements.trim().length()==0)
-        {
+        if (inputJobRequirements == null || inputJobRequirements.trim().length() == 0) {
             displayToast("Job Requirements is required");
             return false;
         }
 
-        if(inputJobBudget <=0 ){
+        if (inputJobBudget <= 0) {
             displayToast("Job Budget is required");
             return false;
         }
 
-        if(selectedDueDate == null || selectedDueDate.length() == 0)
-        {
+        if (selectedDueDate == null || selectedDueDate.length() == 0) {
             displayToast("Job due date is required");
             return false;
         }
 
-        if(selectedDueTime == null || selectedDueTime.length() == 0) {
+        if (selectedDueTime == null || selectedDueTime.length() == 0) {
             displayToast("Job due time is required");
             return false;
         }
@@ -342,7 +336,7 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void displayToast(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void findViews() {
