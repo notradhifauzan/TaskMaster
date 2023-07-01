@@ -2,9 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="mainColor">#8692f7</color>
-    <color name="PowderBlue">#A9B3F9</color>
+    <color name="mainColor">#6F77DB</color>
+    <color name="mainColor2">#5257B1</color>
+    <color name="fontDarkBlue">#363988</color>
     <color name="AntiFlashWhite">#F0F0F0</color>
-    <color name="MediumSlateBlue">#6871EB</color>
-    <color name="TaupeGray">#929192</color>
+    <color name="GreenAccept">#51db56</color>
+    <color name="RedWarning">#d74242</color>
+    <color name="fontLavender">#E5E7FE</color>
+    <color name="fontLavender2">#D8DBFE</color>
+    <color name="transparent">#00000000</color>
 </resources>

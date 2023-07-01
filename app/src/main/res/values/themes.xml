@@ -3,7 +3,14 @@
     <style name="Base.Theme.TaskMaster" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="bottomNavigationStyle">@style/AppBottomNavigationStyle</item>
     </style>
 
     <style name="Theme.TaskMaster" parent="Base.Theme.TaskMaster" />
+
+    <style name="AppBottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemBackground">@android:color/transparent</item> <!-- Remove the highlight by setting the background to transparent -->
+        <!-- Add or modify other attributes as needed -->
+    </style>
+
 </resources>

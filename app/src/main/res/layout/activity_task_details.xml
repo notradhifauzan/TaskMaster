@@ -74,7 +74,7 @@
         android:text="Date: 12 June 2023"
         android:textSize="20sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/btnCompleteTask"
+        app:layout_constraintBottom_toTopOf="@+id/btnAcceptTask"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.293"
         app:layout_constraintStart_toStartOf="parent" />
@@ -107,6 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:background="#ACA0A0"
         android:text="Accept Task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

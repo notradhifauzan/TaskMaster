@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/border"
+            android:background="@drawable/bkg_rv"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Date: 12 June 2023"
+                    android:textColor="@color/fontLavender"
                     android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="@+id/tvPrice"
                     app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
@@ -43,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="RM0000.00"
+                    android:textColor="#E5E7FD"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/tvDomain"
                     app:layout_constraintTop_toBottomOf="@+id/tvDomain" />
@@ -50,10 +52,11 @@
                 <TextView
                     android:id="@+id/tvDomain"
                     android:layout_width="274dp"
-                    android:maxHeight="35sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:maxHeight="35sp"
                     android:text="Description"
+                    android:textColor="@color/fontLavender"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.305"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Title"
+                    android:textColor="@color/fontLavender"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/tvDomain"
@@ -76,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="00:00"
+                    android:textColor="@color/fontLavender"
                     android:textStyle="italic"
                     app:layout_constraintStart_toEndOf="@+id/tvDate"
                     app:layout_constraintTop_toTopOf="@+id/tvDate" />
