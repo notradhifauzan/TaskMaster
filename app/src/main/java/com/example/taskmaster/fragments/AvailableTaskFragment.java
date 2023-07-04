@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +31,6 @@ import com.example.taskmaster.remote.TaskService;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,30 +76,43 @@ public class AvailableTaskFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 // for debug purpose
-                Log.d("MyApp","Response: " + response.raw().toString());
+                Log.d("MyApp", "Response: " + response.raw().toString());
 
-                if(response.code() == 401) {
+                if (response.code() == 401) {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
                 } else {
-                    // get list of task objects from response
-                    List<Task> tasks = response.body();
+                    if (response.isSuccessful()) {
+                        // Check the response structure
+                        if (response.body() instanceof List) {
+                            // Response is a list of tasks
+                            List<Task> tasks = response.body();
 
-                    // initialize adapter
-                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                            // initialize adapter
+                            adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
 
-                    // set adapter to the recyclerview
-                    taskList.setAdapter(adapter);
+                            // set adapter to the recyclerview
+                            taskList.setAdapter(adapter);
 
-                    // set layout to recycler view
-                    taskList.setLayoutManager(new LinearLayoutManager(context));
+                            // set layout to recycler view
+                            taskList.setLayoutManager(new LinearLayoutManager(context));
+                        } else {
+                            // Handle unexpected response structure here
+                            Log.e("availableTaskFragment","unexpected response structure");
+                        }
+                    } else {
+                        // Handle unsuccessful response here
+                        Log.e("availableTaskFragment","unsuccessful response");
+                    }
                 }
             }
 
+
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
+                Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("availableTaskFragment:", t.getMessage() + t.getCause() + t.getStackTrace());
+                Log.e("availableTaskFragment",t.getSuppressed().toString());
             }
         });
 

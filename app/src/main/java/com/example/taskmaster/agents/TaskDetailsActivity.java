@@ -89,7 +89,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                acceptTaskDialogBox(id);
+                acceptTaskDialogBox(task);
             }
         });
     }
@@ -156,7 +156,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    private void acceptTaskDialogBox(int id) {
+    private void acceptTaskDialogBox(Task task) {
         // prepare a dialog box with yes and no
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(task.getJob_title());
