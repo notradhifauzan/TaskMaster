@@ -25,10 +25,15 @@ import android.widget.Toast;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
+import com.example.taskmaster.model.Data;
+import com.example.taskmaster.model.Message;
+import com.example.taskmaster.model.Notification;
+import com.example.taskmaster.model.Root;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
 import com.example.taskmaster.remote.ApiUtils;
+import com.example.taskmaster.remote.NotificationService;
 import com.example.taskmaster.remote.TaskService;
 
 import java.util.Calendar;
@@ -225,7 +230,26 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void sendNotification(Task createdTask) {
+        final String SERVER_KEY = "key=AAAA1v9b5D4:APA91bE7z6bxQ4LWjauYKBSvLCIeza5WthFpGzx1-MJOPqiR0E7m22p_LJOGMj2XrRFxyyz_o_IVOMSEej4kqsY7JU7NgWKBqlWWfxNumzjIU6w6Wj3ftc7QJvIhbTYmm76LvbickDBG";
+        final String CONTENT_TYPE = "application/json";
+        Data data = new Data(createdTask.job_domain);
+        Notification noti = new Notification("New task has been added!",createdTask.getJob_domain(),"BottomNavBar");
+        Root root = new Root("NEW_TASK",data,noti);
 
+        NotificationService notificationService = ApiUtils.getNotificationService();
+
+        notificationService.notify(SERVER_KEY,CONTENT_TYPE,root ).enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                Log.d("addTaskNotification","response code: "+response.code());
+                Message message = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Log.e("addTaskNotification",t.getMessage() + "\ncause: " + t.getCause());
+            }
+        });
     }
 
     private void goToMainActivity() {
@@ -358,3 +382,4 @@ public class AddTaskActivity extends AppCompatActivity {
         taskSubmit = findViewById(R.id.taskSubmitButton);
     }
 }
+

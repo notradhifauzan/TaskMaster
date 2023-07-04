@@ -18,12 +18,15 @@ import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class BottomNavBar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav_bar);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("NEW_TASK");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
