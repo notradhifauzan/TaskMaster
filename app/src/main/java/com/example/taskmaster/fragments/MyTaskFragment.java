@@ -106,41 +106,6 @@ public class MyTaskFragment extends Fragment {
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
-        loadingAlert = new LoadingAlert(getActivity());
-        loadingAlert.startAlertDialog();
-        taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
-            @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                loadingAlert.closeAlertDialog();
-                // for debug purpose
-                Log.d("MyApp","Response: " + response.raw().toString());
-
-                if(response.code() == 401) {
-                    // authorization problem, go to login
-                    logoutAlert("Session expired");
-                } else {
-                    // get list of task objects from response
-                    List<Task> tasks = response.body();
-
-                    // initialize adapter
-                    adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
-
-                    // set adapter to the recyclerview
-                    taskList.setAdapter(adapter);
-
-                    // set layout to recycler view
-                    taskList.setLayoutManager(new LinearLayoutManager(context));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                loadingAlert.closeAlertDialog();
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
-            }
-        });
-
         // register the taskList recycler view for context menu
         super.registerForContextMenu(taskList);
 
@@ -182,6 +147,8 @@ public class MyTaskFragment extends Fragment {
     }
 
     private void loadTask() {
+        loadingAlert = new LoadingAlert(getActivity());
+        loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(requireContext()).getUser();
 
@@ -191,6 +158,7 @@ public class MyTaskFragment extends Fragment {
         taskService.getMyTask(user.getToken(),user.getId(),"assigned").enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                loadingAlert.closeAlertDialog();
                 // for debug purpose
                 Log.d("MyApp","Response: " + response.raw().toString());
 
@@ -219,7 +187,7 @@ public class MyTaskFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-
+                loadingAlert.closeAlertDialog();
             }
         });
     }
