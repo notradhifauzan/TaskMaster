@@ -20,15 +20,11 @@ public interface TaskService {
     @GET("jobs/?order=created_at&orderType=desc")
     Call<List<Task>> getAllTask(@Header("api-key") String api_key);
 
-    /*
-    @GET("jobs/unassigned")
-    Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
-    */
     @GET("jobs/?userid[in]=0")
     Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
 
     @GET("jobs/")
-    Call<List<Task>> getMyTask(@Header("api-key") String api_key,@Query("userid[in]") int id);
+    Call<List<Task>> getMyTask(@Header("api-key") String api_key,@Query("userid[in]") int id,@Query("status[in]") String status);
 
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);
@@ -44,6 +40,14 @@ public interface TaskService {
     @FormUrlEncoded
     @POST("jobs/update/{id}")
     Call<Task> acceptTask(@Header("api-key") String api_key, @Path("id") int id,
+                          @Field("job_title") String title, @Field("job_domain") String job_domain,
+                          @Field("requirements") String requirements, @Field("budget") double budget,
+                          @Field("created_at") String created_at, @Field("due_date") String due_date,
+                          @Field("due_time") String due_time, @Field("status") String status, @Field("userid") int userid);
+
+    @FormUrlEncoded
+    @POST("jobs/update/{id}")
+    Call<Task> completeTask(@Header("api-key") String api_key, @Path("id") int id,
                           @Field("job_title") String title, @Field("job_domain") String job_domain,
                           @Field("requirements") String requirements, @Field("budget") double budget,
                           @Field("created_at") String created_at, @Field("due_date") String due_date,

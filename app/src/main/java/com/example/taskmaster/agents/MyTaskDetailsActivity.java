@@ -87,12 +87,12 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
         Button CompleteButton = findViewById(R.id.btnCompleteTask);
 
         // Complete Task Button
-/*        CompleteButton.setOnClickListener(new View.OnClickListener() {
+        CompleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                acceptTaskDialogBox(id);
+                completeTaskDialogBox(task);
             }
-        });*/
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -157,11 +157,11 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    private void acceptTaskDialogBox(int id) {
+    private void completeTaskDialogBox(Task task) {
         // prepare a dialog box with yes and no
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(task.getJob_title());
-        builder.setMessage("Accept this task?");
+        builder.setMessage("Complete this task?");
 
         // prepare action listener for each button
         builder.setPositiveButton("Yes",
@@ -169,7 +169,7 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // accept task function
-                        doAcceptTask(task.getJobid());
+                        doCompleteTask(task);
                     }
                 });
         builder.setNegativeButton("No",
@@ -189,17 +189,17 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 
-    private void doAcceptTask(int jobid) {
+    private void doCompleteTask(Task task) {
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser(); //token related
 
         taskService = ApiUtils.getTaskService();
-        taskService.acceptTask(user.getToken(),task.getJobid(),task.getJob_title(),
+        taskService.completeTask(user.getToken(),task.getJobid(),task.getJob_title(),
                 task.getJob_domain(),task.getRequirements(),task.getBudget(),
                 task.getCreated_at(),task.getDue_date(),
-                task.getDue_time(),"assigned",user.getId()).enqueue(new Callback<Task>() {
+                task.getDue_time(),"completed",user.getId()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
-                Log.d("myapp: ","Trying to update job id: " + task.getJobid());
+                Log.d("myapp: ","Trying to complete job id: " + task.getJobid());
                 Log.d("MyApp:","Response: " + response.raw().toString());
 
                 if(response.code() == 401)
@@ -211,10 +211,10 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
                 } else {
                     if(response.code() == 200)
                     {
-                        displayToast("Task accepted successfully");
+                        displayToast("Task completed successfully");
                     } else {
-                        displayToast("Failed to accept task: " + response.code());
-                        Log.e("accept task error",response.raw().toString());
+                        displayToast("Failed to complete task: " + response.code());
+                        Log.e("complete task error",response.raw().toString());
                     }
                     startActivity(new Intent(getApplicationContext(), BottomNavBar.class));
                     finish();

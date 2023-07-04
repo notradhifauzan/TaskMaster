@@ -177,7 +177,7 @@ public class AdminTaskView extends AppCompatActivity {
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
-        taskService.getAllTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+        taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 // for debug purpose

@@ -182,7 +182,7 @@ public class MyTaskFragment extends Fragment {
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
-        taskService.getMyTask(user.getToken(),user.getId()).enqueue(new Callback<List<Task>>() {
+        taskService.getMyTask(user.getToken(),user.getId(),"assigned").enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 // for debug purpose
