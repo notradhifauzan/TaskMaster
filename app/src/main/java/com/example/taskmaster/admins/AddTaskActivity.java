@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -37,6 +38,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddTaskActivity extends AppCompatActivity {
+    LoadingAlert loadingAlert;
+
     private NotificationManagerCompat notificationManager;
     // DatePickerDialog variables
     Calendar calendar = Calendar.getInstance();
@@ -183,12 +186,15 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void doAddTask(Task task) {
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
         taskService.createTask(user.getToken(), task).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
+                loadingAlert.closeAlertDialog();
                 Log.d("MyApp:", "Response: " + response.raw().toString());
 
                 if (response.code() == 401) {
@@ -211,6 +217,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
                 Log.e("MyApp:", t.getMessage());
             }

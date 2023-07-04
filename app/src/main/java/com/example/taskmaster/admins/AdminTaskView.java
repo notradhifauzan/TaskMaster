@@ -45,6 +45,7 @@ public class AdminTaskView extends AppCompatActivity {
     Context context;
     RecyclerView taskList;
     TaskAdapter2 adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class AdminTaskView extends AppCompatActivity {
         MenuInflater inflater = super.getMenuInflater();
 
         // inflate the menu using our XML menu file id, options_menu
-        inflater.inflate(R.menu.task_options_menu,menu);
+        inflater.inflate(R.menu.task_options_menu, menu);
 
         return true;
     }
@@ -106,71 +107,74 @@ public class AdminTaskView extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         Task selectedTask = adapter.getSelectedItem();
-        Log.d("contextItemSelected","selected " + selectedTask.toString());
+        Log.d("contextItemSelected", "selected " + selectedTask.toString());
 
-        if(item.getItemId() == R.id.update) {
+        if (item.getItemId() == R.id.update) {
             doViewDetails(selectedTask);
-            Log.d("myApp","You clicked update context menu");
+            Log.d("myApp", "You clicked update context menu");
         } else if (item.getItemId() == R.id.delete) {
             loadingAlert = new LoadingAlert(this);
             loadingAlert.startAlertDialog();
             doDeleteTask(selectedTask);
-            Log.d("myapp","you clicked delete task context menu");
+            Log.d("myapp", "you clicked delete task context menu");
         }
 
         return super.onContextItemSelected(item);
     }
 
     private void doViewDetails(Task selectedTask) {
-        Log.d("AdminTaskView","selectedTask Id: " + selectedTask.getJobid());
-        Log.d("myapp","viewing details " + selectedTask.toString());
-        Intent intent = new Intent(getApplicationContext(),UpdateTaskActivity.class);
+        Log.d("AdminTaskView", "selectedTask Id: " + selectedTask.getJobid());
+        Log.d("myapp", "viewing details " + selectedTask.toString());
+        Intent intent = new Intent(getApplicationContext(), UpdateTaskActivity.class);
         intent.putExtra("task_id", selectedTask.getJobid());
         startActivity(intent);
     }
 
     /*
-    * Delete book record. Called by contextual menu "Delete"
-    * @param selectedTask = task selected by admin
-    *
-    * */
+     * Delete book record. Called by contextual menu "Delete"
+     * @param selectedTask = task selected by admin
+     *
+     * */
     private void doDeleteTask(Task selectedTask) {
-        Log.d("myapp","attempting to delete task " + selectedTask.toString());
+        Log.d("myapp", "attempting to delete task " + selectedTask.toString());
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
         // prepare REST API call
         taskService = ApiUtils.getTaskService();
-        try{
-            Call<DeleteResponse> call = taskService.deleteTask(user.getToken(),selectedTask.getJobid());
+        try {
+            Call<DeleteResponse> call = taskService.deleteTask(user.getToken(), selectedTask.getJobid());
             // execute the call
             call.enqueue(new Callback<DeleteResponse>() {
                 @Override
                 public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
-                    Log.d("myapp",response.message());
-                    if(response.code() == 200) {
+                    loadingAlert.closeAlertDialog();
+                    Log.d("myapp", response.message());
+                    if (response.code() == 200) {
                         // 200 means ok
                         displayAlert("Task successfully deleted");
 
                         // update data in list view
                         updateListView();
                     }
-                    loadingAlert.closeAlertDialog();
                 }
 
                 @Override
                 public void onFailure(Call<DeleteResponse> call, Throwable t) {
                     displayAlert("Error [" + t.getMessage() + "]");
-                    Log.e("myapp",t.getMessage());
+                    Log.e("myapp", t.getMessage());
+                    loadingAlert.closeAlertDialog();
                 }
             });
-        } catch(Exception e) {
-            Log.e("retrofit error",e.getMessage());
+        } catch (Exception e) {
+            Log.e("retrofit error", e.getMessage());
             loadingAlert.closeAlertDialog();
         }
     }
 
     private void updateListView() {
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
@@ -180,10 +184,11 @@ public class AdminTaskView extends AppCompatActivity {
         taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                loadingAlert.closeAlertDialog();
                 // for debug purpose
-                Log.d("MyApp","Response: " + response.raw().toString());
+                Log.d("MyApp", "Response: " + response.raw().toString());
 
-                if(response.code() == 401) {
+                if (response.code() == 401) {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
                 } else {
@@ -203,8 +208,9 @@ public class AdminTaskView extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
-                Log.e("MyApp:",t.getMessage());
+                loadingAlert.closeAlertDialog();
+                Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
+                Log.e("MyApp:", t.getMessage());
             }
         });
     }
@@ -224,15 +230,13 @@ public class AdminTaskView extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == R.id.logout)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
             logoutDialogbox();
             return true;
         }
 
-        if(item.getItemId() == R.id.add_task)
-        {
+        if (item.getItemId() == R.id.add_task) {
             addTaskDialogBox();
             return true;
         }
@@ -299,7 +303,7 @@ public class AdminTaskView extends AppCompatActivity {
         SharedPrefManager.getInstance(getApplicationContext()).logout();
 
         // display message
-        Toast.makeText(getApplicationContext(),"You have successfully logged out",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "You have successfully logged out", Toast.LENGTH_LONG).show();
 
         // forward to MainActivity
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
