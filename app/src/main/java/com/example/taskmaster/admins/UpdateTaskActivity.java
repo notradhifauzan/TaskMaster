@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -31,6 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateTaskActivity extends AppCompatActivity {
+    LoadingAlert loadingAlert;
 
     // DatePickerDialog variables
     Calendar calendar = Calendar.getInstance();
@@ -118,6 +120,8 @@ public class UpdateTaskActivity extends AppCompatActivity {
     }
 
     private void doUpdateTask(Task task) {
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
@@ -128,6 +132,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 task.getDue_time(),task.getStatus()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
+                loadingAlert.closeAlertDialog();
                 Log.d("myapp: ","Trying to update job id: " + task.getJobid());
                 Log.d("MyApp:","Response: " + response.raw().toString());
 
@@ -152,6 +157,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 displayToast("Couldn't connect to server");
             }
         });
@@ -227,6 +233,8 @@ public class UpdateTaskActivity extends AppCompatActivity {
     }
 
     private void loadTaskDetails(int id) {
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
@@ -237,6 +245,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
         taskService.getTask(user.getToken(), id).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
+                loadingAlert.closeAlertDialog();
                 // for debug purpose
                 Log.d("myapp", "response: " + response.raw().toString());
 
@@ -253,6 +262,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 Toast.makeText(null, "Error connecting", Toast.LENGTH_LONG).show();
             }
         });
