@@ -43,7 +43,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.tvTime.setText(t.getDue_time());
         holder.tvDate.setText(t.getDue_date());
         holder.tvDomain.setText(t.getJob_domain());
-        holder.tvPrice.setText(String.valueOf(t.getBudget()));
+        holder.tvPrice.setText(String.format("RM %.2f", t.getBudget()));
         holder.tvTitle.setText(t.getJob_title());
     }
 
