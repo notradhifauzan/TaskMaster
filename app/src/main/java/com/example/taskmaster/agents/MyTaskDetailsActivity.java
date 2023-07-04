@@ -77,8 +77,8 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
                 tvDomain.setText(task.getJob_domain());
                 tvRequirement.setText(task.getRequirements());
                 tvCreated_at.setText(task.getCreated_at());
-                tvPrice.setText(String.valueOf(task.getBudget()));
-                tvDate.setText("Due: " + task.getDue_date());
+                tvPrice.setText(String.format("RM %.2f", task.getBudget()));
+                tvDate.setText(task.getDue_date());
                 tvTime.setText(task.getDue_time());
                 //tvStatus.setText(task.getStatus());
             }
