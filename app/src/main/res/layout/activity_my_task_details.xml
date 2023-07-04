@@ -5,13 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pic_wave2"
-    android:padding="30sp"
+    android:paddingLeft="30sp"
+    android:paddingTop="20sp"
+    android:paddingRight="30sp"
+    android:paddingBottom="30sp"
     tools:context=".agents.MyTaskDetailsActivity">
 
     <TextView
         android:id="@+id/tvID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="10sp"
         android:text="ShowingID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -110,8 +114,8 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10sp"
             android:layout_marginLeft="5sp"
+            android:layout_marginBottom="10sp"
             android:fontFamily="@font/poppins_medium_italic"
             android:text="12 June 2023"
             android:textSize="20sp"
