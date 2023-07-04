@@ -1,5 +1,6 @@
 package com.example.taskmaster.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
 import com.example.taskmaster.agents.TaskDetailsActivity;
 import com.example.taskmaster.model.SharedPrefManager;
@@ -37,6 +39,7 @@ import retrofit2.Response;
 
 public class AvailableTaskFragment extends Fragment {
 
+    LoadingAlert loadingAlert;
     private TaskService taskService;
     private Context context;
     private RecyclerView taskList;
@@ -71,10 +74,14 @@ public class AvailableTaskFragment extends Fragment {
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
+        loadingAlert = new LoadingAlert(getActivity());
+        loadingAlert.startAlertDialog();
         // execute the call. send the user token when sending the query
         taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
+
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                loadingAlert.closeAlertDialog();
                 // for debug purpose
                 Log.d("MyApp", "Response: " + response.raw().toString());
 
@@ -110,6 +117,7 @@ public class AvailableTaskFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
                 Log.e("availableTaskFragment:", t.getMessage() + t.getCause() + t.getStackTrace());
                 Log.e("availableTaskFragment",t.getSuppressed().toString());

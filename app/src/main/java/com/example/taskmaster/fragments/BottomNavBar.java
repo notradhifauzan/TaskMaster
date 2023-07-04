@@ -15,17 +15,19 @@ import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavBar extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav_bar);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navAvailableTask) {
                 loadFragment(new AvailableTaskFragment());
@@ -37,10 +39,8 @@ public class BottomNavBar extends AppCompatActivity {
                 loadFragment(new PreferenceFragment());
                 return true;
             }
-                // Add more conditions for each item in your bottom navigation bar
-
+            // Add more conditions for each item in your bottom navigation bar
             return false;
-
         });
 
         // Set the initial fragment (AvailableTaskFragment) when the activity starts

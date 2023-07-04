@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
 import com.example.taskmaster.agents.MyTaskDetailsActivity;
 import com.example.taskmaster.agents.TaskDetailsActivity;
@@ -43,6 +44,7 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class MyTaskFragment extends Fragment {
+    LoadingAlert loadingAlert;
 
     TaskService taskService;
     Context context;
@@ -104,9 +106,12 @@ public class MyTaskFragment extends Fragment {
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
+        loadingAlert = new LoadingAlert(getActivity());
+        loadingAlert.startAlertDialog();
         taskService.getUnassignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                loadingAlert.closeAlertDialog();
                 // for debug purpose
                 Log.d("MyApp","Response: " + response.raw().toString());
 
@@ -130,6 +135,7 @@ public class MyTaskFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 Toast.makeText(context,"Error connecting to the server", Toast.LENGTH_LONG).show();
                 Log.e("MyApp:",t.getMessage());
             }

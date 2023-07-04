@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.fragments.BottomNavBar;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -29,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyTaskDetailsActivity extends AppCompatActivity {
+    LoadingAlert loadingAlert;
 
     TaskService taskService;
     Task task;
@@ -47,10 +49,13 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
 
         taskService = ApiUtils.getTaskService();
 
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         // execute the API query. send the token and book id
         taskService.getTask(user.getToken(), id).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
+                loadingAlert.closeAlertDialog();
                 Log.d("TaskMaster:", "Response: " + response.raw().toString());
 
                 task = response.body();
@@ -80,6 +85,7 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 Toast.makeText(null, "Error connecting", Toast.LENGTH_LONG).show();
             }
         });
@@ -190,6 +196,8 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
     }
 
     private void doCompleteTask(Task task) {
+        loadingAlert = new LoadingAlert(this);
+        loadingAlert.startAlertDialog();
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser(); //token related
 
         taskService = ApiUtils.getTaskService();
@@ -199,6 +207,7 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
                 task.getDue_time(),"completed",user.getId()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
+                loadingAlert.closeAlertDialog();
                 Log.d("myapp: ","Trying to complete job id: " + task.getJobid());
                 Log.d("MyApp:","Response: " + response.raw().toString());
 
@@ -223,6 +232,7 @@ public class MyTaskDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+                loadingAlert.closeAlertDialog();
                 displayToast("Couldn't connect to server");
             }
         });
