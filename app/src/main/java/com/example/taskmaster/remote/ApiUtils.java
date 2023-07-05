@@ -19,5 +19,4 @@ public class ApiUtils {
     public static NotificationService getNotificationService(){
         return RetrofitClient.getClient(FCM_URL).create(NotificationService.class);
     }
-
 }

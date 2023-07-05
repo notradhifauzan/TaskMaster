@@ -10,4 +10,12 @@ public class Notification {
         this.text = text;
         this.click_action = click_action;
     }
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", click_action='" + click_action + '\'' +
+                '}';
+    }
 }

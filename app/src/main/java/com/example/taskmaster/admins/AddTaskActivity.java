@@ -2,7 +2,6 @@ package com.example.taskmaster.admins;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -45,7 +44,6 @@ import retrofit2.Response;
 public class AddTaskActivity extends AppCompatActivity {
     LoadingAlert loadingAlert;
 
-    private NotificationManagerCompat notificationManager;
     // DatePickerDialog variables
     Calendar calendar = Calendar.getInstance();
     int year = calendar.get(Calendar.YEAR);
@@ -77,7 +75,6 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        notificationManager = NotificationManagerCompat.from(this);
 
         findViews();
 
@@ -229,19 +226,24 @@ public class AddTaskActivity extends AppCompatActivity {
         });
     }
 
+
     private void sendNotification(Task createdTask) {
+
         final String SERVER_KEY = "key=AAAA1v9b5D4:APA91bE7z6bxQ4LWjauYKBSvLCIeza5WthFpGzx1-MJOPqiR0E7m22p_LJOGMj2XrRFxyyz_o_IVOMSEej4kqsY7JU7NgWKBqlWWfxNumzjIU6w6Wj3ftc7QJvIhbTYmm76LvbickDBG";
         final String CONTENT_TYPE = "application/json";
         Data data = new Data(createdTask.job_domain);
         Notification noti = new Notification("New task has been added!",createdTask.getJob_domain(),"BottomNavBar");
-        Root root = new Root("NEW_TASK",data,noti);
+        Root root = new Root("/topics/NEW_TASK",data,noti);
+
+        Log.d("sendNotification",root.toString());
 
         NotificationService notificationService = ApiUtils.getNotificationService();
 
-        notificationService.notify(SERVER_KEY,CONTENT_TYPE,root ).enqueue(new Callback<Message>() {
+        notificationService.notify(SERVER_KEY,CONTENT_TYPE,root).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 Log.d("addTaskNotification","response code: "+response.code());
+                Log.d("addTaskNotification",response.raw().toString());
                 Message message = response.body();
             }
 
