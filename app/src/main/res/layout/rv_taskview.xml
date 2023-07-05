@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
     android:layout_margin="10sp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/task_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10sp"
         android:background="@drawable/bkg_rv"
+        app:cardCornerRadius="15sp"
+        android:padding="10sp"
+        app:cardBackgroundColor="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
-                android:padding="10sp" >
+                android:padding="10sp">
 
                 <TextView
                     android:id="@+id/tvDate"

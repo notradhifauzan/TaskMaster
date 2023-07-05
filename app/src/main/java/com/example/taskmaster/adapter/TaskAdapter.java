@@ -22,7 +22,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate the single item layout
-        View view = inflater.inflate(R.layout.rv_admin_taskview,parent,false);
+        View view = inflater.inflate(R.layout.rv_taskview,parent,false);
 
         // return a new holder instance
         ViewHolder viewHolder = new ViewHolder(view);
