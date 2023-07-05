@@ -1,6 +1,7 @@
 package com.example.taskmaster.fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -58,6 +59,8 @@ public class BottomNavBar extends AppCompatActivity {
         // inflate the menu using our XML menu file id, options_menu
         inflater.inflate(R.menu.options_menu,menu);
 
+        MenuItem menuItem = menu.findItem(R.id.searchView);
+
         return true;
     }
 
@@ -67,6 +70,7 @@ public class BottomNavBar extends AppCompatActivity {
             logoutDialogbox();
             return true;
         }
+
         return false;
     }
 

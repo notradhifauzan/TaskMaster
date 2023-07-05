@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmaster.R;
 import com.example.taskmaster.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> {
+public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> implements Filterable {
 
     @Override
     public TaskAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,6 +55,40 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         return taskList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                FilterResults filterResults = new FilterResults();
+                if(charSequence == null || charSequence.length() == 0){
+                    filterResults.values = taskListFilter;
+                    filterResults.count = taskListFilter.size();
+                } else {
+                    String searchStr = charSequence.toString().toLowerCase();
+                    List<Task> taskModels = new ArrayList<>();
+                    for(Task taskModel: taskModels) {
+                        if(taskModel.getJob_domain().toLowerCase().contains(searchStr) ||
+                                taskModel.getJob_title().toLowerCase().contains(searchStr)) {
+                            taskModels.add(taskModel);
+                        }
+                    }
+
+                    filterResults.values = taskModels;
+                    filterResults.count = taskModels.size();
+                }
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                taskList = (List<Task>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+        return filter;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView tvTitle;
         public TextView tvDomain;
@@ -78,12 +115,14 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
     }
 
     private List<Task> taskList;
+    private List<Task> taskListFilter;
     private Context context;
     private int currentPos;
 
     public TaskAdapter2(Context context,List<Task> listData) {
         taskList = listData;
         this.context = context;
+        this.taskListFilter = listData;
     }
 
     private Context getContext() {return context;}

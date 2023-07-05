@@ -58,29 +58,32 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 loadingAlert.closeAlertDialog();
                 Log.d("TaskMaster:", "Response: " + response.raw().toString());
 
-                task = response.body();
+                if(response.code() != 204) {
+                    task = response.body();
+                    // get references to the view elements
+                    TextView tvID = findViewById(R.id.tvID);
+                    TextView tvTitle = findViewById(R.id.tvTitle);
+                    TextView tvDomain = findViewById(R.id.tvDomain);
+                    TextView tvRequirement = findViewById(R.id.tvRequirement);
+                    TextView tvCreated_at = findViewById(R.id.tvCreated_at);
+                    TextView tvPrice = findViewById(R.id.tvPrice);
+                    TextView tvDate = findViewById(R.id.tvDate);
+                    TextView tvTime = findViewById(R.id.tvTime);
+                    //TextView tvStatus = findViewById(R.id.tvStatus);
 
-                // get references to the view elements
-                TextView tvID = findViewById(R.id.tvID);
-                TextView tvTitle = findViewById(R.id.tvTitle);
-                TextView tvDomain = findViewById(R.id.tvDomain);
-                TextView tvRequirement = findViewById(R.id.tvRequirement);
-                TextView tvCreated_at = findViewById(R.id.tvCreated_at);
-                TextView tvPrice = findViewById(R.id.tvPrice);
-                TextView tvDate = findViewById(R.id.tvDate);
-                TextView tvTime = findViewById(R.id.tvTime);
-                //TextView tvStatus = findViewById(R.id.tvStatus);
-
-                //set values
-                tvID.setText("ID: "+task.getJobid());
-                tvTitle.setText(String.valueOf(task.getJob_title()));
-                tvDomain.setText(task.getJob_domain());
-                tvRequirement.setText(task.getRequirements());
-                tvCreated_at.setText(task.getCreated_at());
-                tvPrice.setText(String.format("RM %.2f", task.getBudget()));
-                tvDate.setText(task.getDue_date());
-                tvTime.setText(task.getDue_time());
-                //tvStatus.setText(task.getStatus());
+                    //set values
+                    tvID.setText("ID: "+task.getJobid());
+                    tvTitle.setText(String.valueOf(task.getJob_title()));
+                    tvDomain.setText(task.getJob_domain());
+                    tvRequirement.setText(task.getRequirements());
+                    tvCreated_at.setText(task.getCreated_at());
+                    tvPrice.setText(String.format("RM %.2f", task.getBudget()));
+                    tvDate.setText(task.getDue_date());
+                    tvTime.setText(task.getDue_time());
+                    //tvStatus.setText(task.getStatus());
+                } else {
+                    displayToast("No content to show");
+                }
             }
 
             @Override

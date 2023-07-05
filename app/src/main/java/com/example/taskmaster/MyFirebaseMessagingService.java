@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,40 +13,63 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.taskmaster.agents.TaskDetailsActivity;
+import com.example.taskmaster.fragments.BottomNavBar;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String THIS_TAG = "firebaseMessagingService";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(THIS_TAG, "From: " + remoteMessage.getFrom());
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(THIS_TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        String jsonMessage = "";
+        // check if message contains a data payload
+        if(remoteMessage.getData().size() > 0) {
+            Log.d(THIS_TAG,"Message data payload: " + remoteMessage.getData());
+            try {
+                JSONObject data = new JSONObject(remoteMessage.getData());
+                jsonMessage = data.getString("extra_information");
+                Log.d(THIS_TAG,"onMessageReceived: \n" + "Extra Information: " + jsonMessage);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getNotification().getBody());
+        // check if message containts a notification payload
+        if(remoteMessage.getNotification() != null) {
+            String title = remoteMessage.getNotification().getTitle();
+            String message = remoteMessage.getNotification().getBody();
+            String click_action = remoteMessage.getNotification().getClickAction();
+
+            Log.d(THIS_TAG,"Notification Title: " + title);
+            Log.d(THIS_TAG,"Notification Body: " + message);
+            Log.d(THIS_TAG,"Notification click_action: " + click_action);
+
+            sendNotification(title,message,click_action);
+        }
     }
 
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_IMMUTABLE);
+    private void sendNotification(String title,String message,String click_action) {
+        Intent intent = null;
 
-        String channelId = "My channel ID";
+        if(click_action.equals("newTask")){
+          intent = new Intent(this, BottomNavBar.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+        
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("FCM Message")
-                        .setContentText(messageBody)
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.baseline_work_outline_24)
+                        .setContentTitle(title)
+                        .setContentText(message)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
@@ -53,14 +77,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+        if (isAppInForeground(this)) {
+            // If the app is in the foreground, show the notification without the sound and vibration
+            notificationBuilder.setSound(null);
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        } else {
+            // If the app is not in the foreground, show the notification with sound and vibration
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
         }
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+    private boolean isAppInForeground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (appProcesses == null) {
+            return false;
+        }
+        final String packageName = context.getPackageName();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -22,7 +22,12 @@
             android:exported="false" />
         <activity
             android:name=".fragments.BottomNavBar"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="newTask"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".agents.MyTaskActivity"
             android:exported="false" />
@@ -38,9 +43,9 @@
         <activity
             android:name=".agents.TaskviewActivity"
             android:exported="false" />
-        <activity
-            android:name=".agents.TaskDetailsActivity"
-            android:exported="false" />
+        <activity android:name=".agents.TaskDetailsActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

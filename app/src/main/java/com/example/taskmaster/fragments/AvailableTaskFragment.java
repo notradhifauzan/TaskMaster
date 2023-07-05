@@ -155,11 +155,6 @@ public class AvailableTaskFragment extends Fragment {
         startActivity(intent);
     }
 
-    public void showBottomNavBar() {
-        Intent intent = new Intent(requireContext(), BottomNavBar.class);
-        startActivity(intent);
-    }
-
     private void logoutAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage(message)

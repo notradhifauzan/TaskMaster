@@ -231,8 +231,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         final String SERVER_KEY = "key=AAAA1v9b5D4:APA91bE7z6bxQ4LWjauYKBSvLCIeza5WthFpGzx1-MJOPqiR0E7m22p_LJOGMj2XrRFxyyz_o_IVOMSEej4kqsY7JU7NgWKBqlWWfxNumzjIU6w6Wj3ftc7QJvIhbTYmm76LvbickDBG";
         final String CONTENT_TYPE = "application/json";
-        Data data = new Data(createdTask.job_domain);
-        Notification noti = new Notification("New task has been added!",createdTask.getJob_domain(),"BottomNavBar");
+        Data data = new Data(String.valueOf(createdTask.getJobid()));
+        Notification noti = new Notification("New task has been added!",createdTask.getJob_domain(),"newTask");
         Root root = new Root("/topics/NEW_TASK",data,noti);
 
         Log.d("sendNotification",root.toString());
