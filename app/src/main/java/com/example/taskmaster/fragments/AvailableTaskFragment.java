@@ -96,7 +96,7 @@ public class AvailableTaskFragment extends Fragment {
                             List<Task> tasks = response.body();
 
                             // initialize adapter
-                            adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                            adapter = new TaskAdapter(context, tasks);
 
                             // set adapter to the recyclerview
                             taskList.setAdapter(adapter);

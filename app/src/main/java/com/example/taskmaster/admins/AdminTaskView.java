@@ -192,17 +192,19 @@ public class AdminTaskView extends AppCompatActivity {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
                 } else {
-                    // get list of task object from response
-                    List<Task> tasks = response.body();
+                    if(response.body() instanceof List){
+                        // get list of task object from response
+                        List<Task> tasks = response.body();
 
-                    // initialize adapter
-                    adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
+                        // initialize adapter
+                        adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
-                    // set adapter to the recyclerview
-                    taskList.setAdapter(adapter);
+                        // set adapter to the recyclerview
+                        taskList.setAdapter(adapter);
 
-                    // set layout to recycler view
-                    taskList.setLayoutManager(new LinearLayoutManager(context));
+                        // set layout to recycler view
+                        taskList.setLayoutManager(new LinearLayoutManager(context));
+                    }
                 }
             }
 

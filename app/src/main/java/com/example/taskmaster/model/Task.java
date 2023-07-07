@@ -10,6 +10,7 @@ public class Task {
     public String due_date;
     public String due_time;
     public String status;
+    public String agent_name;
 
     public Task() {
     }

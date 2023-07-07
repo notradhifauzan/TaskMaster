@@ -16,6 +16,10 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(TaskService.class);
     }
 
+    public static TaskService getCustomTaskService() {
+        return RetrofitClient.getClientV2(BASE_URL).create(TaskService.class);
+    }
+
     public static NotificationService getNotificationService(){
         return RetrofitClient.getClient(FCM_URL).create(NotificationService.class);
     }

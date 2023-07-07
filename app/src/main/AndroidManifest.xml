@@ -40,9 +40,6 @@
         <activity
             android:name=".admins.AddTaskActivity"
             android:exported="false" />
-        <activity
-            android:name=".agents.TaskviewActivity"
-            android:exported="false" />
         <activity android:name=".agents.TaskDetailsActivity"
             android:exported="false">
         </activity>

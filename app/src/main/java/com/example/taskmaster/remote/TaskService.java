@@ -20,10 +20,10 @@ public interface TaskService {
     @GET("jobs/?order=created_at&orderType=desc")
     Call<List<Task>> getAllTask(@Header("api-key") String api_key);
 
-    @GET("jobs/?status[in]=completed")
+    @GET("jobs/completed")
     Call<List<Task>> getAllCompletedTask(@Header("api-key") String api_key);
 
-    @GET("jobs/?status[in]=assigned")
+    @GET("jobs/assigned")
     Call<List<Task>> getAllAssignedTask(@Header("api-key") String api_key);
 
     @GET("jobs/?status[in]=completed")
