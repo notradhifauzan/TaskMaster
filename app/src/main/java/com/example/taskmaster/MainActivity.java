@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.taskmaster.adminFragments.AdminNavBarActivity;
 import com.example.taskmaster.admins.AddTaskActivity;
-import com.example.taskmaster.admins.AdminTaskView;
 import com.example.taskmaster.fragments.BottomNavBar;
 import com.example.taskmaster.model.ErrorResponse;
 import com.example.taskmaster.model.SharedPrefManager;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if(SharedPrefManager.getInstance(this).isLoggedIn()) {
             if(SharedPrefManager.getInstance(this).getUser().getRole().equalsIgnoreCase("admin"))
             {
-                startActivity(new Intent(this, AdminTaskView.class));
+                startActivity(new Intent(this, AdminNavBarActivity.class));
                 finish();
             } else {
                 startActivity(new Intent(this, BottomNavBar.class));
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             goToTaskView();
                         } else if (user.getRole().equalsIgnoreCase("admin")) {
-                            startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
+                            startActivity(new Intent(getApplicationContext(), AdminNavBarActivity.class));
                             finish();
                         } else {
                             goToTaskView();

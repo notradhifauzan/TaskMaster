@@ -18,14 +18,18 @@
         android:theme="@style/Theme.TaskMaster"
         tools:targetApi="31">
         <activity
+            android:name=".adminFragments.AdminNavBarActivity"
+            android:exported="false" />
+        <activity
             android:name=".agents.MyTaskDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".fragments.BottomNavBar"
             android:exported="true">
             <intent-filter>
-                <action android:name="newTask"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
+                <action android:name="newTask" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -40,9 +44,9 @@
         <activity
             android:name=".admins.AddTaskActivity"
             android:exported="false" />
-        <activity android:name=".agents.TaskDetailsActivity"
-            android:exported="false">
-        </activity>
+        <activity
+            android:name=".agents.TaskDetailsActivity"
+            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -61,6 +65,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Available Task"
+        android:id="@+id/navAvailableTask"
+        android:icon="@drawable/ic_task_available"/>
+
+    <item android:title="Assigned Task"
+        android:id="@+id/navAssignedTask"
+        android:icon="@drawable/ic_pending_task_24"/>
+
+    <item android:title="Add Task"
+        android:id="@+id/navAddTask"
+        android:icon="@drawable/ic_add_24"/>
+
+    <item android:title="Completed Task"
+        android:id="@+id/navCompletedTask"
+        android:icon="@drawable/ic_completed_task_24"/>
+
+    <item android:title="Account Settings"
+        android:id="@+id/navAccSetting"
+        android:icon="@drawable/ic_acc_setting_24"/>
+</menu>
