@@ -46,7 +46,7 @@ public class AdminNavBarActivity extends AppCompatActivity {
                 addTaskDialogBox();
                 return true;
             } else if (item.getItemId() == R.id.navAccSetting) {
-                loadFragment(new PreferenceFragment());
+                loadFragment(new AdminAccSettingFragment());
                 return true;
             }
             // Add more conditions for each item in your bottom navigation bar
