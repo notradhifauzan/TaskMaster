@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/transparent" /> <!-- Set the desired background color -->
+    <stroke
+        android:color="@color/darkGrey"
+    android:width="1sp"
+    />
+    <corners
+        android:radius="8sp"/> <!-- Set the desired radius for top right corner -->
+</shape>
