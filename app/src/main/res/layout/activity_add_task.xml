@@ -1,90 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/bkg_grad_purple">
 
     <!-- the container -->
     <LinearLayout
-        android:layout_margin="24dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="20sp"
+        android:orientation="vertical">
 
         <!-- actual content -->
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:cardCornerRadius="15sp">
 
-            <EditText
-                android:id="@+id/edtJobTitle"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Job Title"/>
-
-            <EditText
-                android:id="@+id/edtJobDomain"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Job Domain"/>
-
-            <EditText
-                android:gravity="top"
-                android:id="@+id/edtJobRequirements"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:inputType="text|textMultiLine"
-                android:hint="Requirements"/>
-
-            <EditText
-                android:id="@+id/edtBudget"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Budget"
-                android:inputType="number"/>
-
-            <!-- dueDateInput is the id for DatePicker -->
             <LinearLayout
-                android:layout_margin="10dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:background="@drawable/pic_blob1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="8sp"
+                android:paddingTop="15sp">
 
-                <EditText
-                    android:id="@+id/edtDueDate"
-                    android:layout_weight="2"
+                <TextView
+                    android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Due Date"
-                    />
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="15sp"
+                    android:text="Add Task"
+                    android:textAlignment="center"
+                    android:textColor="@color/fontLavender"
+                    android:textSize="20sp" />
 
-                <EditText
-                    android:id="@+id/edtDueTime"
-                    android:layout_weight="2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Due Time"
-                    />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="20sp"
+                    app:cardElevation="20sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="20sp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15sp"
+                            android:paddingRight="15sp">
+
+                            <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_medium"
+
+                                android:textStyle="bold"
+                                android:paddingLeft="10sp"
+                                android:text="Job Title"
+                                android:textColor="@color/darkGrey"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <EditText
+                                android:id="@+id/edtJobTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="48sp"
+                                android:focusable="false"
+                                android:fontFamily="@font/poppins"
+                                android:hint="Job Title"
+                                android:padding="10sp"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/darkGrey"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/textView11"
+                                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                            <TextView
+                                android:id="@+id/textView20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20sp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textStyle="bold"
+                                android:paddingLeft="10sp"
+                                android:text="Job Domain"
+                                android:textColor="@color/darkGrey"
+                                android:textColorHint="@color/darkGrey"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toStartOf="@+id/edtJobTitle"
+                                app:layout_constraintTop_toBottomOf="@+id/edtJobTitle" />
+
+                            <EditText
+                                android:id="@+id/edtJobDomain"
+                                android:layout_width="0dp"
+                                android:layout_height="48sp"
+                                android:layout_marginBottom="15sp"
+                                android:editable="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/poppins"
+                                android:hint="Job Domain"
+                                android:padding="10sp"
+                                android:textColor="@color/darkGrey"
+                                android:textColorHint="@color/darkGrey"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+
+                                android:id="@+id/linearLayout2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:layout_editor_absoluteX="10dp">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:layout_constraintWidth_percent="0.5">
+
+                                    <LinearLayout
+                                        android:id="@+id/linearLayout3"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="5sp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/poppins"
+                                            android:text="Due date"
+                                            android:textColor="@color/darkGrey"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/edtDueDate"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/bkg_white_round"
+                                            android:fontFamily="@font/poppins"
+                                            android:hint="Due Date"
+                                            android:padding="10sp"
+                                            android:textColorHint="#605E5E"
+                                            android:textSize="18sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/linearLayout4"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="5sp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintWidth_percent="0.5">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:fontFamily="@font/poppins"
+                                            android:text="Due time"
+                                            android:textColor="@color/darkGrey"
+                                            android:textSize="16sp" />
+
+                                        <EditText
+                                            android:id="@+id/edtDueTime"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/bkg_white_round"
+                                            android:fontFamily="@font/poppins"
+                                            android:hint="Due Time"
+                                            android:padding="10sp"
+                                            android:textColorHint="#605E5E"
+                                            android:textSize="18sp" />
+                                    </LinearLayout>
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10sp"
+                                android:fontFamily="@font/poppins"
+                                android:text="Requirement"
+                                android:textColor="@color/darkGrey"
+                                android:textColorHint="@color/fontLavender2"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+                            <EditText
+                                android:id="@+id/edtJobRequirements"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:layout_marginTop="10sp"
+                                android:background="@drawable/bkg_lgrey_round"
+                                android:fontFamily="@font/poppins"
+                                android:gravity="top"
+                                android:hint="Requirements"
+                                android:inputType="text|textMultiLine"
+                                android:padding="10sp"
+                                android:paddingRight="10sp"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15sp"
+                                android:fontFamily="@font/poppins"
+                                android:paddingLeft="10sp"
+                                android:text="Budget (RM)"
+                                android:textColor="@color/darkGrey"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/edtJobRequirements" />
+
+                            <EditText
+                                android:id="@+id/edtBudget"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10sp"
+                                android:background="@drawable/bkg_white_round"
+                                android:fontFamily="@font/poppins"
+                                android:hint="Budget"
+                                android:inputType="number"
+                                android:padding="10sp"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+                            <Button
+                                android:id="@+id/taskSubmitButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="30sp"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:text="Add Now"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/edtBudget" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- dueDateInput is the id for DatePicker -->
 
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <Button
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/taskSubmitButton"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"/>
-
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>
