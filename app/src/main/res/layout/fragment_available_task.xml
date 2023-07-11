@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
+    android:padding="10sp"
     tools:context=".fragments.AvailableTaskFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutSearchbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10sp"
             android:fontFamily="@font/raleway_semibold_italic"
             android:maxHeight="100sp"
             android:padding="10sp"
@@ -30,16 +31,63 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginRight="10sp"
+            android:background="@drawable/bkg_search_bar"
+            android:orientation="horizontal"
+            android:paddingLeft="2sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/textView6"
+                    android:layout_width="0dp"
+                    android:layout_height="48sp"
+                    android:background="@color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="Search"
+                    android:paddingLeft="20sp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="48sp"
+                    android:layout_height="48sp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/transparent"
+                    android:src="@drawable/baseline_search_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAvailableTask"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="5sp"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
         </androidx.recyclerview.widget.RecyclerView>
 
