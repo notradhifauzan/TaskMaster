@@ -58,10 +58,14 @@
                     android:hint="Search"
                     android:paddingLeft="20sp"
                     android:textSize="16sp"
+                    android:maxLines="1"
+                    android:inputType="textNoSuggestions"
+                    android:scrollHorizontally="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/imageButton"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
                 <ImageButton
                     android:id="@+id/imageButton"
@@ -82,7 +86,7 @@
             android:id="@+id/rvAvailableTask"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="5sp"
+            android:layout_marginTop="12sp"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
