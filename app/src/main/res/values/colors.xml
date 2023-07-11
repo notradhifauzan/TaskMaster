@@ -11,4 +11,5 @@
     <color name="fontLavender">#E5E7FE</color>
     <color name="fontLavender2">#D8DBFE</color>
     <color name="transparent">#00000000</color>
+    <color name="darkGrey">#6C6C6C</color>
 </resources>

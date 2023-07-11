@@ -88,7 +88,7 @@
             android:id="@+id/btnAcceptTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bkg_btn_green"
+            android:background="@drawable/bkg_lgrey_round"
             android:text="Accept Task"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
