@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="Hello Mr,"
+                android:text="Hello,"
                 android:textColor="#006A9F"
                 android:textSize="48sp"
                 app:layout_constraintEnd_toEndOf="parent"
