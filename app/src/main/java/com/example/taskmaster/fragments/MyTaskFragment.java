@@ -23,6 +23,7 @@ import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.adapter.TaskAdapter2;
 import com.example.taskmaster.agents.MyTaskDetailsActivity;
 import com.example.taskmaster.agents.TaskDetailsActivity;
 import com.example.taskmaster.model.SharedPrefManager;
@@ -49,7 +50,7 @@ public class MyTaskFragment extends Fragment {
     TaskService taskService;
     Context context;
     RecyclerView taskList;
-    TaskAdapter adapter;
+    TaskAdapter2 adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -174,7 +175,7 @@ public class MyTaskFragment extends Fragment {
                         List<Task> tasks = response.body();
 
                         // initialize adapter
-                        adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                        adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
                         // set adapter to the recyclerview
                         taskList.setAdapter(adapter);

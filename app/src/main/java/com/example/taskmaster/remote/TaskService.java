@@ -2,6 +2,7 @@ package com.example.taskmaster.remote;
 
 import com.example.taskmaster.model.DeleteResponse;
 import com.example.taskmaster.model.Task;
+import com.example.taskmaster.model.TaskV1;
 
 import java.util.List;
 
@@ -62,8 +63,14 @@ public interface TaskService {
                           @Field("created_at") String created_at, @Field("due_date") String due_date,
                           @Field("due_time") String due_time, @Field("status") String status, @Field("userid") int userid);
 
+    @FormUrlEncoded
+    @POST("jobs/add")
+    Call<Task> createTask(@Header("api-key") String api_key, @Field("job_title") String job_title,
+                          @Field("job_domain") String job_domain,@Field("requirements") String requirements,
+                          @Field("budget") String budget, @Field("due_date") String due_date,
+                          @Field("due_time") String due_time);
     @POST("jobs")
-    Call<Task> createTask(@Header("api-key") String api_key, @Body Task task);
+    Call<TaskV1> createTaskV2(@Header("api-key") String api_key, @Body TaskV1 task);
 
     // delete a task record
     @POST("jobs/delete/{id}")

@@ -24,6 +24,7 @@ import com.example.taskmaster.R;
 
 import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.adapter.TaskAdapter2;
 import com.example.taskmaster.agents.TaskDetailsActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -43,7 +44,7 @@ public class AvailableTaskFragment extends Fragment {
     private TaskService taskService;
     private Context context;
     private RecyclerView taskList;
-    private TaskAdapter adapter;
+    private TaskAdapter2 adapter;
 
     public AvailableTaskFragment() {
         // Required empty public constructor
@@ -96,7 +97,7 @@ public class AvailableTaskFragment extends Fragment {
                             List<Task> tasks = response.body();
 
                             // initialize adapter
-                            adapter = new TaskAdapter(context, tasks);
+                            adapter = new TaskAdapter2(context, tasks);
 
                             // set adapter to the recyclerview
                             taskList.setAdapter(adapter);

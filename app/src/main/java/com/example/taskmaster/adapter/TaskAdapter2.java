@@ -1,6 +1,7 @@
 package com.example.taskmaster.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmaster.R;
+import com.example.taskmaster.adminFragments.AdminNavBarActivity;
+import com.example.taskmaster.fragments.BottomNavBar;
+import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 
 import java.util.ArrayList;
@@ -25,7 +29,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate the single item layout
-        View view = inflater.inflate(R.layout.rv_taskview,parent,false);
+        View view = inflater.inflate(R.layout.rv_taskview, parent, false);
 
         // return a new holder instance
         ViewHolder viewHolder = new ViewHolder(view);
@@ -33,7 +37,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
     }
 
     public Task getSelectedItem() {
-        if(currentPos >=0 && taskList!=null && currentPos<taskList.size()) {
+        if (currentPos >= 0 && taskList != null && currentPos < taskList.size()) {
             return taskList.get(currentPos);
         }
         return null;
@@ -48,6 +52,23 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         holder.tvDomain.setText(t.getJob_domain());
         holder.tvPrice.setText(String.format("RM %.2f", t.getBudget()));
         holder.tvTitle.setText(t.getJob_title());
+        holder.assignedTo.setText("test test");
+
+        // check user condition to manipulate 'assigned to' view on viewholder
+        String userRole = SharedPrefManager.getInstance(getContext()).getUser().getRole();
+        if (userRole.equalsIgnoreCase("user") ||
+                userRole.equalsIgnoreCase("agent")) {
+            holder.assignedTo.setVisibility(View.GONE);
+        } else {
+            // check job condition
+            if (t.getStatus().equalsIgnoreCase("assigned")) {
+                holder.assignedTo.setText("Assigned to - " + t.getAgent_name());
+            } else if (t.getStatus().equalsIgnoreCase("completed")) {
+                holder.assignedTo.setText("Completed by - " + t.getAgent_name());
+            } else {
+                holder.assignedTo.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -61,14 +82,14 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
-                if(charSequence == null || charSequence.length() == 0){
+                if (charSequence == null || charSequence.length() == 0) {
                     filterResults.values = taskListFilter;
                     filterResults.count = taskListFilter.size();
                 } else {
                     String searchStr = charSequence.toString().toLowerCase();
                     List<Task> taskModels = new ArrayList<>();
-                    for(Task taskModel: taskModels) {
-                        if(taskModel.getJob_domain().toLowerCase().contains(searchStr) ||
+                    for (Task taskModel : taskModels) {
+                        if (taskModel.getJob_domain().toLowerCase().contains(searchStr) ||
                                 taskModel.getJob_title().toLowerCase().contains(searchStr)) {
                             taskModels.add(taskModel);
                         }
@@ -95,6 +116,8 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         public TextView tvPrice;
         public TextView tvDate;
         public TextView tvTime;
+        public TextView assignedTo;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -103,6 +126,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
+            assignedTo = itemView.findViewById(R.id.assignedToTextView);
 
             itemView.setOnLongClickListener(this);
         }
@@ -119,13 +143,15 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
     private Context context;
     private int currentPos;
 
-    public TaskAdapter2(Context context,List<Task> listData) {
+    public TaskAdapter2(Context context, List<Task> listData) {
         taskList = listData;
         this.context = context;
         this.taskListFilter = listData;
     }
 
-    private Context getContext() {return context;}
+    private Context getContext() {
+        return context;
+    }
 
 
 }

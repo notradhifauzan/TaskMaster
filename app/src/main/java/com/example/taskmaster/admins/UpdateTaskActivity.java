@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
+import com.example.taskmaster.adminFragments.AdminNavBarActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
 import com.example.taskmaster.model.User;
@@ -150,7 +151,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
                         displayToast("Failed to update task: " + response.code());
                         Log.e("update task error",response.raw().toString());
                     }
-                    startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
+                    startActivity(new Intent(getApplicationContext(), AdminNavBarActivity.class));
                     finish();
                 }
             }

@@ -17,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
 import com.example.taskmaster.adapter.TaskAdapter;
+import com.example.taskmaster.adapter.TaskAdapter2;
 import com.example.taskmaster.agents.MyTaskDetailsActivity;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.example.taskmaster.model.Task;
@@ -49,7 +51,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
     TaskService taskService;
     Context context;
     RecyclerView taskList;
-    TaskAdapter adapter;
+    TaskAdapter2 adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -140,6 +142,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
         Intent intent = new Intent(requireContext(), MyTaskDetailsActivity.class);
         Toast.makeText(requireContext(), "Showing Details", Toast.LENGTH_SHORT).show();
         intent.putExtra("taskID", selectedTask.getJobid());
+        intent.putExtra("caller","admin");
         startActivity(intent);
     }
 
@@ -154,7 +157,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
         User user = SharedPrefManager.getInstance(requireContext()).getUser();
 
         // get task service instance
-        taskService = ApiUtils.getTaskService();
+        taskService = ApiUtils.getCustomTaskService();
 
         taskService.getAllAssignedTask(user.getToken()).enqueue(new Callback<List<Task>>() {
             @Override
@@ -175,7 +178,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
                         List<Task> tasks = response.body();
 
                         // initialize adapter
-                        adapter = new TaskAdapter(context, (ArrayList<Task>) tasks);
+                        adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
                         // set adapter to the recyclerview
                         taskList.setAdapter(adapter);

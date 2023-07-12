@@ -60,6 +60,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
                 if(response.code() != 204) {
                     task = response.body();
+
                     // get references to the view elements
                     TextView tvID = findViewById(R.id.tvID);
                     TextView tvTitle = findViewById(R.id.tvTitle);

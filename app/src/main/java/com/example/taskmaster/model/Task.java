@@ -11,12 +11,12 @@ public class Task {
     public String due_time;
     public String status;
     public String agent_name;
+    public int user_id;
+    public String role;
 
-    public Task() {
-    }
-
-    public Task(int jobid, String job_title, String job_domain, String requirements, String created_at, String due_date, String due_time, String status) {
+    public Task(int jobid, double budget, String job_title, String job_domain, String requirements, String created_at, String due_date, String due_time, String status, String agent_name, int user_id, String role) {
         this.jobid = jobid;
+        this.budget = budget;
         this.job_title = job_title;
         this.job_domain = job_domain;
         this.requirements = requirements;
@@ -24,10 +24,19 @@ public class Task {
         this.due_date = due_date;
         this.due_time = due_time;
         this.status = status;
+        this.agent_name = agent_name;
+        this.user_id = user_id;
+        this.role = role;
     }
+
+    public Task(){};
 
     public int getJobid() {
         return jobid;
+    }
+
+    public void setJobid(int jobid) {
+        this.jobid = jobid;
     }
 
     public double getBudget() {
@@ -36,10 +45,6 @@ public class Task {
 
     public void setBudget(double budget) {
         this.budget = budget;
-    }
-
-    public void setJobid(int jobid) {
-        this.jobid = jobid;
     }
 
     public String getJob_title() {
@@ -98,6 +103,30 @@ public class Task {
         this.status = status;
     }
 
+    public String getAgent_name() {
+        return agent_name;
+    }
+
+    public void setAgent_name(String agent_name) {
+        this.agent_name = agent_name;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -110,6 +139,9 @@ public class Task {
                 ", due_date='" + due_date + '\'' +
                 ", due_time='" + due_time + '\'' +
                 ", status='" + status + '\'' +
+                ", agent_name='" + agent_name + '\'' +
+                ", user_id=" + user_id +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

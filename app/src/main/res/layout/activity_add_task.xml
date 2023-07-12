@@ -78,7 +78,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="48sp"
                                 android:background="@drawable/bkg_white_round"
-                                android:focusable="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="Job Title"
                                 android:padding="10sp"
@@ -110,8 +109,7 @@
                                 android:layout_height="48sp"
                                 android:layout_marginBottom="15sp"
                                 android:background="@drawable/bkg_white_round"
-                                android:editable="false"
-                                android:focusable="false"
+
                                 android:fontFamily="@font/poppins"
                                 android:hint="Job Domain"
                                 android:padding="10sp"

@@ -24,12 +24,13 @@ import android.widget.Toast;
 import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Util.LoadingAlert;
+import com.example.taskmaster.adminFragments.AdminNavBarActivity;
 import com.example.taskmaster.model.Data;
 import com.example.taskmaster.model.Message;
 import com.example.taskmaster.model.Notification;
 import com.example.taskmaster.model.Root;
 import com.example.taskmaster.model.SharedPrefManager;
-import com.example.taskmaster.model.Task;
+import com.example.taskmaster.model.TaskV1;
 import com.example.taskmaster.model.User;
 import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.NotificationService;
@@ -66,7 +67,7 @@ public class AddTaskActivity extends AppCompatActivity {
             edtBudget, edtDueDate, edtDueTime;
     Button taskSubmit;
 
-    Task task;
+    TaskV1 task;
 
     TaskService taskService;
     Context context;
@@ -108,7 +109,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 if (validateInput()) {
                     Log.d("myApp:", "input is validated!");
-                    task = new Task();
+                    task = new TaskV1();
                     initializeTaskObject(task);
 
                     // debugging purpose
@@ -187,15 +188,15 @@ public class AddTaskActivity extends AppCompatActivity {
         finish();
     }
 
-    private void doAddTask(Task task) {
+    private void doAddTask(TaskV1 task) {
         loadingAlert = new LoadingAlert(this);
         loadingAlert.startAlertDialog();
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
-        taskService.createTask(user.getToken(), task).enqueue(new Callback<Task>() {
+        taskService.createTaskV2(user.getToken(),task).enqueue(new Callback<TaskV1>() {
             @Override
-            public void onResponse(Call<Task> call, Response<Task> response) {
+            public void onResponse(Call<TaskV1> call, Response<TaskV1> response) {
                 loadingAlert.closeAlertDialog();
                 Log.d("MyApp:", "Response: " + response.raw().toString());
 
@@ -207,18 +208,21 @@ public class AddTaskActivity extends AppCompatActivity {
                 } else {
                     if (response.code() == 201) {
                         displayToast("Task created successfully");
-                        Task createdTask = response.body();
+                        TaskV1 createdTask = response.body();
                         sendNotification(createdTask);
                     } else {
-                        displayToast("Failed to create new task: " + response.code());
+                        displayToast("Failed to add new task: " + response.code());
+                        Log.e("add-task-error","trying to send: " + task.toString());
+                        Log.e("add-task-error",response.raw().toString());
+                        Log.e("add-task-error",response.message());
                     }
-                    startActivity(new Intent(getApplicationContext(), AdminTaskView.class));
+                    startActivity(new Intent(getApplicationContext(), AdminNavBarActivity.class));
                     finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<Task> call, Throwable t) {
+            public void onFailure(Call<TaskV1> call, Throwable t) {
                 loadingAlert.closeAlertDialog();
                 Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
                 Log.e("MyApp:", t.getMessage());
@@ -227,7 +231,7 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-    private void sendNotification(Task createdTask) {
+    private void sendNotification(TaskV1 createdTask) {
 
         final String SERVER_KEY = "key=AAAA1v9b5D4:APA91bE7z6bxQ4LWjauYKBSvLCIeza5WthFpGzx1-MJOPqiR0E7m22p_LJOGMj2XrRFxyyz_o_IVOMSEej4kqsY7JU7NgWKBqlWWfxNumzjIU6w6Wj3ftc7QJvIhbTYmm76LvbickDBG";
         final String CONTENT_TYPE = "application/json";
@@ -313,7 +317,7 @@ public class AddTaskActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void initializeTaskObject(Task task) {
+    private void initializeTaskObject(TaskV1 task) {
         task.setJob_title(inputJobTitle);
         task.setJob_domain(inputJobDomain);
         task.setRequirements(inputJobRequirements);
