@@ -87,16 +87,16 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
                     filterResults.count = taskListFilter.size();
                 } else {
                     String searchStr = charSequence.toString().toLowerCase();
-                    List<Task> taskModels = new ArrayList<>();
-                    for (Task taskModel : taskModels) {
+                    List<Task> filteredList = new ArrayList<>();
+                    for (Task taskModel : taskListFilter) {
                         if (taskModel.getJob_domain().toLowerCase().contains(searchStr) ||
-                                taskModel.getJob_title().toLowerCase().contains(searchStr)) {
-                            taskModels.add(taskModel);
+                                taskModel.getJob_title().toLowerCase().contains(searchStr) ||
+                                taskModel.getRequirements().toLowerCase().contains(searchStr)) {
+                            filteredList.add(taskModel);
                         }
                     }
-
-                    filterResults.values = taskModels;
-                    filterResults.count = taskModels.size();
+                    filterResults.values = filteredList;
+                    filterResults.count = filteredList.size();
                 }
                 return filterResults;
             }
@@ -109,6 +109,7 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         };
         return filter;
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView tvTitle;

@@ -50,7 +50,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/textView6"
+                    android:id="@+id/searchBar"
                     android:layout_width="0dp"
                     android:layout_height="48sp"
                     android:background="@color/transparent"
