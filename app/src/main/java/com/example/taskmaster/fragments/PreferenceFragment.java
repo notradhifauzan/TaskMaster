@@ -1,5 +1,8 @@
 package com.example.taskmaster.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.taskmaster.MainActivity;
 import com.example.taskmaster.R;
+import com.example.taskmaster.model.SharedPrefManager;
+import com.example.taskmaster.model.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +70,67 @@ public class PreferenceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_preference, container, false);
+        View view = inflater.inflate(R.layout.fragment_preference, container, false);
+
+        if(SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
+            User user = SharedPrefManager.getInstance(getActivity()).getUser();
+
+            TextView username = view.findViewById(R.id.textView4);
+            TextView username2 = view.findViewById(R.id.textView5);
+
+            username.setText(user.getUsername());
+            username2.setText(user.getUsername());
+        }
+
+        Button logoutButton = view.findViewById(R.id.button);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logoutDialogbox();
+            }
+        });
+
+        return view;
+    }
+
+    private void doLogout() {
+        // clear the shared preferences
+        SharedPrefManager.getInstance(getActivity()).logout();
+
+
+        // forward to MainActivity
+        startActivity(new Intent(getActivity(), MainActivity.class));
+
+        // display message
+        Toast.makeText(getActivity(), "You have successfully logged out", Toast.LENGTH_LONG).show();
+    }
+
+    private void logoutDialogbox() {
+        // prepare a dialog box with yes and no
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Logout");
+        builder.setMessage("Log out from the app?");
+
+        // prepare action listener for each button
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doLogout();
+                    }
+                });
+        builder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                });
+
+        // create the alert dialog and show to the user
+        AlertDialog alert = builder.create();
+        alert.show();
+
     }
 }
