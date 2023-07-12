@@ -56,7 +56,7 @@
                     android:id="@+id/assignedToTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Assigned to"

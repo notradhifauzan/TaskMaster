@@ -13,16 +13,14 @@ public class RetrofitClient {
 
     public static Retrofit getClientV2(String URL) {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,true);
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 
-        if(retrofit == null) {
-            // initialize retrofit
-             retrofit = new Retrofit.Builder()
-                    .baseUrl(URL)
-                    .addConverterFactory(JacksonConverterFactory.create(mapper))
-                    .client(new OkHttpClient())
-                    .build();
-        }
+        // initialize retrofit
+        retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(JacksonConverterFactory.create(mapper))
+                .client(new OkHttpClient())
+                .build();
 
         return retrofit;
     }
@@ -30,13 +28,13 @@ public class RetrofitClient {
     public static Retrofit getClient(String URL) {
 
         // first API call, no retrofit instance yet?
-        if (retrofit == null) {
-            // initialize retrofit
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
+
+        // initialize retrofit
+        retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
 
         // return instance of retrofit
         return retrofit;

@@ -97,21 +97,25 @@ public class AvailableTaskFragment extends Fragment {
                 } else {
                     if (response.isSuccessful()) {
                         // Check the response structure
-                        if (response.body() instanceof List) {
-                            // Response is a list of tasks
-                            List<Task> tasks = response.body();
-
-                            // initialize adapter
-                            adapter = new TaskAdapter2(context, tasks);
-
-                            // set adapter to the recyclerview
-                            taskList.setAdapter(adapter);
-
-                            // set layout to recycler view
-                            taskList.setLayoutManager(new LinearLayoutManager(context));
+                        if(response.code() == 204) {
+                            displayAlert("No content to display");
                         } else {
-                            // Handle unexpected response structure here
-                            Log.e("availableTaskFragment","unexpected response structure");
+                            if (response.body() instanceof List) {
+                                // Response is a list of tasks
+                                List<Task> tasks = response.body();
+
+                                // initialize adapter
+                                adapter = new TaskAdapter2(context, tasks);
+
+                                // set adapter to the recyclerview
+                                taskList.setAdapter(adapter);
+
+                                // set layout to recycler view
+                                taskList.setLayoutManager(new LinearLayoutManager(context));
+                            } else {
+                                // Handle unexpected response structure here
+                                Log.e("availableTaskFragment","unexpected response structure");
+                            }
                         }
                     } else {
                         // Handle unsuccessful response here
@@ -171,6 +175,19 @@ public class AvailableTaskFragment extends Fragment {
         }
         return super.onContextItemSelected(item);
 
+    }
+
+    private void displayAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {          // do things
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void doShowDetails(Task selectedTask) {

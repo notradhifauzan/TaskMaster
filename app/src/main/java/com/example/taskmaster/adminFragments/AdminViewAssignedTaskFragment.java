@@ -147,7 +147,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
     }
 
     private void displayToast(String message) {
-        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
     }
 
     private void loadTask() {
@@ -164,8 +164,7 @@ public class AdminViewAssignedTaskFragment extends Fragment {
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 loadingAlert.closeAlertDialog();
                 // for debug purpose
-                Log.d("MyApp","Response: " + response.raw().toString());
-
+                Log.d("assigned-task","Response: " + response.raw().toString());
                 if(response.code() == 401) {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
@@ -174,23 +173,32 @@ public class AdminViewAssignedTaskFragment extends Fragment {
                         // no task yet for this particular user
                         displayToast("No task yet...");
                     } else {
-                        // get list of task object from response
-                        List<Task> tasks = response.body();
+                        if(response.code() == 200) {
+                            // get list of task object from response
+                            List<Task> tasks = response.body();
+                            Log.e("assigned-task",response.body().toString());
+                            // initialize adapter
+                            adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
-                        // initialize adapter
-                        adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
+                            // set adapter to the recyclerview
+                            taskList.setAdapter(adapter);
 
-                        // set adapter to the recyclerview
-                        taskList.setAdapter(adapter);
-
-                        // set layout to recycler view
-                        taskList.setLayoutManager(new LinearLayoutManager(context));
+                            // set layout to recycler view
+                            taskList.setLayoutManager(new LinearLayoutManager(context));
+                        } else {
+                            Log.e("assigned-task","code: "+String.valueOf(response.code()));
+                            displayToast("Something unexpected occured");
+                        }
                     }
                 }
+                Log.d("assigned-task","Response: " + response.raw().toString());
             }
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
+                Log.e("assigned-task","FAILURE: " + t.getCause());
+                Log.e("assigned-task","FAILURE: " + t.getMessage());
+                displayToast("response: " + t.getMessage());
                 loadingAlert.closeAlertDialog();
             }
         });

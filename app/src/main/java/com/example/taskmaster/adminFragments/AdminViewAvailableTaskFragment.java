@@ -97,21 +97,25 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                 } else {
                     if (response.isSuccessful()) {
                         // Check the response structure
-                        if (response.body() instanceof List) {
-                            // Response is a list of tasks
-                            List<Task> tasks = response.body();
-
-                            // initialize adapter
-                            adapter = new TaskAdapter2(context, tasks);
-
-                            // set adapter to the recyclerview
-                            taskList.setAdapter(adapter);
-
-                            // set layout to recycler view
-                            taskList.setLayoutManager(new LinearLayoutManager(context));
+                        if(response.code() == 204) {
+                            displayAlert("No content to display");
                         } else {
-                            // Handle unexpected response structure here
-                            Log.e("availableTaskFragment","unexpected response structure");
+                            if (response.body() instanceof List) {
+                                // Response is a list of tasks
+                                List<Task> tasks = response.body();
+
+                                // initialize adapter
+                                adapter = new TaskAdapter2(context, tasks);
+
+                                // set adapter to the recyclerview
+                                taskList.setAdapter(adapter);
+
+                                // set layout to recycler view
+                                taskList.setLayoutManager(new LinearLayoutManager(context));
+                            } else {
+                                // Handle unexpected response structure here
+                                Log.e("availableTaskFragment","unexpected response structure");
+                            }
                         }
                     } else {
                         // Handle unsuccessful response here
