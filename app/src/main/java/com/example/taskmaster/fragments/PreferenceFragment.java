@@ -79,7 +79,7 @@ public class PreferenceFragment extends Fragment {
             TextView username2 = view.findViewById(R.id.textView5);
 
             username.setText(user.getUsername());
-            username2.setText(user.getUsername());
+            //username2.setText(user.getUsername());
         }
 
         Button logoutButton = view.findViewById(R.id.button);
