@@ -37,6 +37,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_task_details);
 
         // enable back button
@@ -62,7 +63,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     task = response.body();
 
                     // get references to the view elements
-                    TextView tvID = findViewById(R.id.tvID);
+                    //TextView tvID = findViewById(R.id.tvID);
                     TextView tvTitle = findViewById(R.id.tvTitle);
                     TextView tvDomain = findViewById(R.id.tvDomain);
                     TextView tvRequirement = findViewById(R.id.tvRequirement);
@@ -73,7 +74,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     //TextView tvStatus = findViewById(R.id.tvStatus);
 
                     //set values
-                    tvID.setText("ID: "+task.getJobid());
+                    //tvID.setText("ID: "+task.getJobid());
                     tvTitle.setText(String.valueOf(task.getJob_title()));
                     tvDomain.setText(task.getJob_domain());
                     tvRequirement.setText(task.getRequirements());

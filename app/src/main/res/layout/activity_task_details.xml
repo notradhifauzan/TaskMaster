@@ -4,25 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pic_wave2"
-    android:padding="30sp"
+    android:background="@drawable/pic_loginbkg"
     tools:context=".agents.TaskDetailsActivity">
-
-    <TextView
-        android:id="@+id/tvID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ShowingID"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="55sp"
+        android:layout_height="55sp"
+        android:layout_margin="20sp"
+        android:src="@drawable/ic_acc_circle_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30sp"
+        android:fontFamily="@font/poppins_medium_italic"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10sp"
+        android:fontFamily="@font/poppins_medium"
+        android:maxHeight="100sp"
+        android:padding="10sp"
+        android:text="Task Details"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="30sp"
         android:background="@drawable/bkg_grey_details"
         android:padding="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvID"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         tools:layout_editor_absoluteX="30dp">
 
 
@@ -30,12 +62,14 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Title"
+            android:textColor="@color/darkGrey"
             android:textSize="34sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.056"
+            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,6 +91,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_light"
             android:text="Task Request time"
+            android:textColor="@color/darkGrey"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/tvDomain"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,9 +111,10 @@
                 android:id="@+id/tvRequirement"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/poppins_light"
+                android:fontFamily="@font/poppins"
                 android:scrollbars="vertical"
                 android:text="Requirement"
+                android:textColor="@color/darkGrey"
                 android:textSize="16sp" />
 
         </ScrollView>
@@ -102,6 +138,7 @@
             android:fontFamily="@font/poppins_medium"
             android:maxHeight="35sp"
             android:text="Domain"
+            android:textColor="@color/darkGrey"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/tvCreated_at"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
@@ -121,8 +158,8 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10sp"
             android:layout_marginLeft="5sp"
+            android:layout_marginBottom="10sp"
             android:fontFamily="@font/poppins_medium_italic"
             android:text="12 June 2023"
             android:textSize="20sp"
