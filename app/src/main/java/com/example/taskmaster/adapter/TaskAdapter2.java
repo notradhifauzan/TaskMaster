@@ -154,5 +154,4 @@ public class TaskAdapter2 extends RecyclerView.Adapter<TaskAdapter2.ViewHolder> 
         return context;
     }
 
-
 }

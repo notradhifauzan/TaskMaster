@@ -36,6 +36,9 @@ import com.example.taskmaster.remote.ApiUtils;
 import com.example.taskmaster.remote.NotificationService;
 import com.example.taskmaster.remote.TaskService;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -195,7 +198,7 @@ public class AddTaskActivity extends AppCompatActivity {
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
-        taskService.createTaskV2(user.getToken(),task).enqueue(new Callback<TaskV1>() {
+        taskService.createTaskV2(user.getToken(), task).enqueue(new Callback<TaskV1>() {
             @Override
             public void onResponse(Call<TaskV1> call, Response<TaskV1> response) {
                 loadingAlert.closeAlertDialog();
@@ -213,9 +216,9 @@ public class AddTaskActivity extends AppCompatActivity {
                         sendNotification(createdTask);
                     } else {
                         displayToast("Failed to add new task: " + response.code());
-                        Log.e("add-task-error","trying to send: " + task.toString());
-                        Log.e("add-task-error",response.raw().toString());
-                        Log.e("add-task-error",response.message());
+                        Log.e("add-task-error", "trying to send: " + task.toString());
+                        Log.e("add-task-error", response.raw().toString());
+                        Log.e("add-task-error", response.message());
                     }
                     startActivity(new Intent(getApplicationContext(), AdminNavBarActivity.class));
                     finish();
@@ -237,24 +240,24 @@ public class AddTaskActivity extends AppCompatActivity {
         final String SERVER_KEY = "key=AAAA1v9b5D4:APA91bE7z6bxQ4LWjauYKBSvLCIeza5WthFpGzx1-MJOPqiR0E7m22p_LJOGMj2XrRFxyyz_o_IVOMSEej4kqsY7JU7NgWKBqlWWfxNumzjIU6w6Wj3ftc7QJvIhbTYmm76LvbickDBG";
         final String CONTENT_TYPE = "application/json";
         Data data = new Data(String.valueOf(createdTask.getJobid()));
-        Notification noti = new Notification("New task has been added!",createdTask.getJob_domain(),"newTask");
-        Root root = new Root("/topics/NEW_TASK",data,noti);
+        Notification noti = new Notification("New task has been added!", createdTask.getJob_domain(), "newTask");
+        Root root = new Root("/topics/NEW_TASK", data, noti);
 
-        Log.d("sendNotification",root.toString());
+        Log.d("sendNotification", root.toString());
 
         NotificationService notificationService = ApiUtils.getNotificationService();
 
-        notificationService.notify(SERVER_KEY,CONTENT_TYPE,root).enqueue(new Callback<Message>() {
+        notificationService.notify(SERVER_KEY, CONTENT_TYPE, root).enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
-                Log.d("addTaskNotification","response code: "+response.code());
-                Log.d("addTaskNotification",response.raw().toString());
+                Log.d("addTaskNotification", "response code: " + response.code());
+                Log.d("addTaskNotification", response.raw().toString());
                 Message message = response.body();
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Log.e("addTaskNotification",t.getMessage() + "\ncause: " + t.getCause());
+                Log.e("addTaskNotification", t.getMessage() + "\ncause: " + t.getCause());
             }
         });
     }
@@ -370,7 +373,23 @@ public class AddTaskActivity extends AppCompatActivity {
             return false;
         }
 
+        /*
+        if (!isValidDate(selectedDueDate)) {
+            displayToast("Invalid due date");
+            return false;
+        } */
+
         return true;
+    }
+
+    private boolean isValidDate(String selectedDueDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date theDueDate = (Date) simpleDateFormat.parse(selectedDueDate);
+        } catch(ParseException e) {
+            return false;
+        }
+        return false;
     }
 
     private void displayToast(String message) {

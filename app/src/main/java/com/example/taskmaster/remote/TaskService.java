@@ -28,13 +28,15 @@ public interface TaskService {
     Call<List<Task>> getAllAssignedTask(@Header("api-key") String api_key);
 
     @GET("jobs/?status[in]=completed")
-    Call<List<Task>> getMyCompletedTask(@Header("api-key") String api_key,@Query("userid[in]") int userid);
+    Call<List<Task>> getMyCompletedTask(@Header("api-key") String api_key,
+                                        @Query("userid[in]") int userid);
 
     @GET("jobs/?userid[in]=0")
     Call<List<Task>> getUnassignedTask(@Header("api-key") String api_key);
 
     @GET("jobs/")
-    Call<List<Task>> getMyTask(@Header("api-key") String api_key,@Query("userid[in]") int id,@Query("status[in]") String status);
+    Call<List<Task>> getMyTask(@Header("api-key") String api_key,@Query("userid[in]") int id,
+                               @Query("status[in]") String status);
 
     @GET("jobs/{id}")
     Call<Task> getTask(@Header("api-key") String api_key, @Path("id") int id);

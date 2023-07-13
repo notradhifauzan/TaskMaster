@@ -77,6 +77,7 @@ public class AdminViewAvailableTaskFragment extends Fragment {
         // get user info from SharedPreferences
         User user = SharedPrefManager.getInstance(requireContext()).getUser();
 
+        /*
         // get task service instance
         taskService = ApiUtils.getTaskService();
 
@@ -97,7 +98,7 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                 } else {
                     if (response.isSuccessful()) {
                         // Check the response structure
-                        if(response.code() == 204) {
+                        if (response.code() == 204) {
                             displayAlert("No content to display");
                         } else {
                             if (response.body() instanceof List) {
@@ -114,12 +115,12 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                                 taskList.setLayoutManager(new LinearLayoutManager(context));
                             } else {
                                 // Handle unexpected response structure here
-                                Log.e("availableTaskFragment","unexpected response structure");
+                                Log.e("availableTaskFragment", "unexpected response structure");
                             }
                         }
                     } else {
                         // Handle unsuccessful response here
-                        Log.e("availableTaskFragment","unsuccessful response");
+                        Log.e("availableTaskFragment", "unsuccessful response");
                     }
                 }
             }
@@ -130,10 +131,12 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                 loadingAlert.closeAlertDialog();
                 Toast.makeText(context, "Error connecting to the server", Toast.LENGTH_LONG).show();
                 Log.e("availableTaskFragment:", t.getMessage() + t.getCause() + t.getStackTrace());
-                Log.e("availableTaskFragment",t.getSuppressed().toString());
+                Log.e("availableTaskFragment", t.getSuppressed().toString());
             }
         });
+        */
 
+        updateListView();
         return view;
     }
 
@@ -197,13 +200,19 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                 @Override
                 public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                     loadingAlert.closeAlertDialog();
-                    Log.d("myapp", response.message());
+                    Log.d("task-deletion", response.message());
+                    Log.d("task-deletion", "code: " + response.code());
                     if (response.code() == 200) {
                         // 200 means ok
                         displayAlert("Task successfully deleted");
 
                         // update data in list view
                         updateListView();
+                    } else {
+                        if(response.code() == 404) {
+                            displayAlert("Item has already been deleted");
+                            updateListView();
+                        }
                     }
                 }
 
@@ -221,7 +230,7 @@ public class AdminViewAvailableTaskFragment extends Fragment {
     }
 
     private void displayAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -253,18 +262,22 @@ public class AdminViewAvailableTaskFragment extends Fragment {
                     // authorization problem, go to login
                     logoutAlert("Session expired");
                 } else {
-                    if (response.body() instanceof List) {
-                        // get list of task object from response
-                        List<Task> tasks = response.body();
+                    if (response.code() == 204) {
+                        displayAlert("No content to display");
+                    } else {
+                        if (response.body() instanceof List) {
+                            // get list of task object from response
+                            List<Task> tasks = response.body();
 
-                        // initialize adapter
-                        adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
+                            // initialize adapter
+                            adapter = new TaskAdapter2(context, (ArrayList<Task>) tasks);
 
-                        // set adapter to the recyclerview
-                        taskList.setAdapter(adapter);
+                            // set adapter to the recyclerview
+                            taskList.setAdapter(adapter);
 
-                        // set layout to recycler view
-                        taskList.setLayoutManager(new LinearLayoutManager(context));
+                            // set layout to recycler view
+                            taskList.setLayoutManager(new LinearLayoutManager(context));
+                        }
                     }
                 }
             }
@@ -277,6 +290,7 @@ public class AdminViewAvailableTaskFragment extends Fragment {
             }
         });
     }
+
     private void logoutAlert(String message) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
         builder.setMessage(message)
