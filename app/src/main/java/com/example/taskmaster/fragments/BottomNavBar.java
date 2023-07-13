@@ -25,6 +25,7 @@ public class BottomNavBar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_bottom_nav_bar);
 
         FirebaseMessaging.getInstance().subscribeToTopic("NEW_TASK");
@@ -51,7 +52,7 @@ public class BottomNavBar extends AppCompatActivity {
         loadFragment(new AvailableTaskFragment());
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // get the menu inflater
         MenuInflater inflater = super.getMenuInflater();
@@ -62,9 +63,9 @@ public class BottomNavBar extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.searchView);
 
         return true;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId() == R.id.logout) {
             logoutDialogbox();
@@ -112,7 +113,7 @@ public class BottomNavBar extends AppCompatActivity {
         // forward to MainActivity
         finish();
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
+    }*/
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

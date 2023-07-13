@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TaskMaster</string>
+    <string name="app_name">taskMaster</string>
     <string name="logout">logout</string>
     <string name="report_bugs">report bugs</string>
     <string name="about">about</string>
@@ -33,4 +33,6 @@
     <string name="admin_available_task">Admin Available Task</string>
     <string name="assigned_task">Assigned Tasks</string>
     <string name="completed_tasks">Completed Tasks</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>
