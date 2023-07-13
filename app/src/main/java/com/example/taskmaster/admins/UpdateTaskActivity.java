@@ -49,7 +49,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
     String selectedDueDate;
     String selectedDueTime;
 
-    String inputJobTitle,inputJobDomain,inputJobRequirements;
+    String inputJobTitle, inputJobDomain, inputJobRequirements;
     double inputJobBudget;
 
     // ---------------views variable-----------------------
@@ -93,7 +93,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getIntExtra("task_id", -1);
 
-        Log.d("myapp","current task id " + id);
+        Log.d("myapp", "current task id " + id);
 
         // load the task details
         loadTaskDetails(id);
@@ -105,13 +105,12 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 // get all field data
                 initializeVariables();
 
-                if(validateInput())
-                {
-                    Log.d("myApp:","input is validated!");
+                if (validateInput()) {
+                    Log.d("myApp:", "input is validated!");
                     initializeTaskObject(task);
 
                     // debugging purpose
-                    Log.d("myApp: ",task.toString());
+                    Log.d("myApp: ", task.toString());
 
                     // send POST request
                     doUpdateTask(task);
@@ -128,29 +127,27 @@ public class UpdateTaskActivity extends AppCompatActivity {
         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
         taskService = ApiUtils.getTaskService();
 
-        taskService.updateTask(user.getToken(),task.getJobid(),task.getJob_title(),
-                task.getJob_domain(),task.getRequirements(),task.getBudget(),
-                task.getCreated_at(),task.getDue_date(),
-                task.getDue_time(),task.getStatus()).enqueue(new Callback<Task>() {
+        taskService.updateTask(user.getToken(), task.getJobid(), task.getJob_title(),
+                task.getJob_domain(), task.getRequirements(), task.getBudget(),
+                task.getCreated_at(), task.getDue_date(),
+                task.getDue_time(), task.getStatus()).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
                 loadingAlert.closeAlertDialog();
-                Log.d("myapp: ","Trying to update job id: " + task.getJobid());
-                Log.d("MyApp:","Response: " + response.raw().toString());
+                Log.d("myapp: ", "Trying to update job id: " + task.getJobid());
+                Log.d("MyApp:", "Response: " + response.raw().toString());
 
-                if(response.code() == 401)
-                {
+                if (response.code() == 401) {
                     // authorization problem, go to login
                     displayToast("Something went wrong: " + response.code());
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 } else {
-                    if(response.code() == 200)
-                    {
+                    if (response.code() == 200) {
                         displayToast("Task updated successfully");
                     } else {
                         displayToast("Failed to update task: " + response.code());
-                        Log.e("update task error",response.raw().toString());
+                        Log.e("update task error", response.raw().toString());
                     }
                     startActivity(new Intent(getApplicationContext(), AdminNavBarActivity.class));
                     finish();
@@ -180,23 +177,21 @@ public class UpdateTaskActivity extends AppCompatActivity {
         TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                String hourStr="", minuteStr = "";
-                if(hours<10)
-                {
+                String hourStr = "", minuteStr = "";
+                if (hours < 10) {
                     hourStr = "0" + hours;
-                } else{
+                } else {
                     hourStr = String.valueOf(hours);
                 }
 
-                if(minutes<10)
-                {
+                if (minutes < 10) {
                     minuteStr = "0" + minutes;
                 } else {
                     minuteStr = String.valueOf(minutes);
                 }
 
-                edtDueTime.setText(hourStr+":"+minuteStr+":"+"00");
-                selectedDueTime = hourStr+":"+minuteStr+":"+"00";
+                edtDueTime.setText(hourStr + ":" + minuteStr + ":" + "00");
+                selectedDueTime = hourStr + ":" + minuteStr + ":" + "00";
             }
         }, hours, minutes, true);
 
@@ -207,18 +202,16 @@ public class UpdateTaskActivity extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                month = month+1;
-                String dayStr = "", monthStr="";
+                month = month + 1;
+                String dayStr = "", monthStr = "";
 
-                if(dayOfMonth<10)
-                {
+                if (dayOfMonth < 10) {
                     dayStr = "0" + dayOfMonth;
                 } else {
                     dayStr = String.valueOf(dayOfMonth);
                 }
 
-                if(month<10)
-                {
+                if (month < 10) {
                     monthStr = "0" + month;
                 } else {
                     monthStr = String.valueOf(month);
@@ -252,14 +245,20 @@ public class UpdateTaskActivity extends AppCompatActivity {
                 Log.d("myapp", "response: " + response.raw().toString());
 
                 // get task object from response
-                task = response.body();
+                if (response.code() == 204) {
+                    displayToast("Content not available");
+                    displayToast("Item may have already been deleted");
+                    displayToast("Refresh to view latest items");
+                    finish();
+                } else {
+                    task = response.body();
+                    selectedDueDate = task.getDue_date();
+                    selectedDueTime = task.getDue_time();
 
-                selectedDueDate = task.getDue_date();
-                selectedDueTime = task.getDue_time();
+                    Log.d("myapp", "viewing task: " + task.toString());
 
-                Log.d("myapp","viewing task: " + task.toString());
-
-                setViews(task);
+                    setViews(task);
+                }
             }
 
             @Override
@@ -307,42 +306,38 @@ public class UpdateTaskActivity extends AppCompatActivity {
 
         try {
             inputJobBudget = Double.parseDouble(edtBudget.getText().toString());
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             inputJobBudget = 0.00;
         }
     }
 
     private boolean validateInput() {
-        if(inputJobTitle == null || inputJobTitle.trim().length() == 0)
-        {
+        if (inputJobTitle == null || inputJobTitle.trim().length() == 0) {
             displayToast("Job Title is required");
             return false;
         }
 
-        if(inputJobDomain == null || inputJobDomain.trim().length()==0)
-        {
+        if (inputJobDomain == null || inputJobDomain.trim().length() == 0) {
             displayToast("Job Domain is required");
             return false;
         }
 
-        if(inputJobRequirements == null || inputJobRequirements.trim().length()==0)
-        {
+        if (inputJobRequirements == null || inputJobRequirements.trim().length() == 0) {
             displayToast("Job Requirements is required");
             return false;
         }
 
-        if(inputJobBudget <=0 ){
+        if (inputJobBudget <= 0) {
             displayToast("Job Budget is required");
             return false;
         }
 
-        if(selectedDueDate == null || selectedDueDate.length() == 0)
-        {
+        if (selectedDueDate == null || selectedDueDate.length() == 0) {
             displayToast("Job due date is required");
             return false;
         }
 
-        if(selectedDueTime == null || selectedDueTime.length() == 0) {
+        if (selectedDueTime == null || selectedDueTime.length() == 0) {
             displayToast("Job due time is required");
             return false;
         }
@@ -351,6 +346,6 @@ public class UpdateTaskActivity extends AppCompatActivity {
     }
 
     private void displayToast(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
