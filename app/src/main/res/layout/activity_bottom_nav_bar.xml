@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pic_wave"
+    android:background="@drawable/pic_loginbkg"
     android:padding="10sp"
     tools:context=".fragments.BottomNavBar">
 
@@ -12,9 +12,9 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
-        android:layout_marginTop="10sp"
-        android:background="@drawable/bkg_bot_nav_bar"
+        android:layout_height="70dp"
+        android:background="@color/transparent"
+        app:elevation="0dp"
         app:itemIconSize="32dp"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"

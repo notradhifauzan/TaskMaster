@@ -78,10 +78,10 @@ public class AdminAccSettingFragment extends Fragment {
             User user = SharedPrefManager.getInstance(getActivity()).getUser();
 
             TextView username = view.findViewById(R.id.textView4);
-            TextView username2 = view.findViewById(R.id.textView5);
+            //TextView username2 = view.findViewById(R.id.textView5);
 
             username.setText(user.getUsername());
-            username2.setText(user.getUsername());
+            //username2.setText(user.getUsername());
         }
 
         Button logoutButton = view.findViewById(R.id.button);

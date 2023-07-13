@@ -10,9 +10,9 @@
         android:id="@+id/task_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bkg_rv"
         app:cardCornerRadius="15sp"
         android:padding="10sp"
+        android:elevation="5sp"
         app:cardBackgroundColor="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bkg_rv"
+            android:background="@drawable/bkg_grad_purple2"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,6 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/poppins_light"
                     android:text="Date: 12 June 2023"
                     android:textColor="@color/fontLavender"
                     android:textStyle="italic"
@@ -56,27 +57,24 @@
                     android:id="@+id/assignedToTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="Assigned to"
                     android:textColor="@color/fontLavender"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
-                    app:layout_constraintStart_toEndOf="@+id/tvTitle" />
+                    app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
                 <TextView
                     android:id="@+id/tvDomain"
                     android:layout_width="329dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/poppins_light"
+                    android:fontFamily="@font/poppins"
                     android:maxHeight="35sp"
-                    android:text="Description"
+                    android:text="@string/domain"
                     android:textColor="@color/fontLavender"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.253"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/assignedToTextView" />
 
                 <TextView
                     android:id="@+id/tvTitle"
@@ -95,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:fontFamily="@font/poppins_medium_italic"
+                    android:fontFamily="@font/poppins_light"
                     android:text="00:00"
                     android:textColor="@color/fontLavender"
                     android:textStyle="italic"

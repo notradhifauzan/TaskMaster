@@ -9,8 +9,7 @@
         android:icon="@drawable/ic_pending_task_24"/>
 
     <item android:title="Add Task"
-        android:id="@+id/navAddTask"
-        android:icon="@drawable/ic_add_24"/>
+        android:id="@+id/navAddTask"/>
 
     <item android:title="Completed Task"
         android:id="@+id/navCompletedTask"

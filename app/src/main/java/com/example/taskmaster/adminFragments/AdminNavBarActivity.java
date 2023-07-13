@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,11 +20,15 @@ import com.example.taskmaster.admins.AddTaskActivity;
 import com.example.taskmaster.fragments.PreferenceFragment;
 import com.example.taskmaster.model.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AdminNavBarActivity extends AppCompatActivity {
+
+    private FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_nav_bar);
 
@@ -43,7 +48,7 @@ public class AdminNavBarActivity extends AppCompatActivity {
                 loadFragment(new AdminViewCompletedTaskFragment());
                 return true;
             } else if (item.getItemId() == R.id.navAddTask) {
-                addTaskDialogBox();
+
                 return true;
             } else if (item.getItemId() == R.id.navAccSetting) {
                 loadFragment(new AdminAccSettingFragment());
@@ -55,6 +60,15 @@ public class AdminNavBarActivity extends AppCompatActivity {
 
         // Set the initial fragment (AvailableTaskFragment) when the activity starts
         loadFragment(new AdminViewAvailableTaskFragment());
+
+        //floating addBtn
+        floatingActionButton = findViewById(R.id.btnAddTask);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTaskDialogBox();
+            }
+        });
     }
 
     private void addTaskDialogBox() {

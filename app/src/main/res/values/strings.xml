@@ -6,28 +6,7 @@
     <string name="add_task">add task</string>
     <string name="details">Details</string>
     <string name="accept_task">Accept Task</string>
-    <string name="available_task">Available Task</string>
-
-    <string-array name="taskTitle">
-        <item>Futuristic City Modeling</item>
-        <item>Graphic Design Portfolio</item>
-    </string-array>
-    <string-array name="taskDescription">
-        <item>Create a 3D model of a futuristic cityscape with flying cars and advanced technology for sci-fi games.</item>
-        <item>Create a responsive website to showcase graphic design projects.</item>
-    </string-array>
-    <string-array name="taskPrice">
-        <item>1200.00</item>
-        <item>400.00</item>
-    </string-array>
-    <string-array name="taskDate">
-        <item>15 November 2023</item>
-        <item>19 September 2023</item>
-    </string-array>
-    <string-array name="taskTime">
-        <item>15:00</item>
-        <item>10:00</item>
-    </string-array>
+    <string name="available_task">Available Tasks</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="admin_available_task">Admin Available Task</string>
@@ -35,4 +14,5 @@
     <string name="completed_tasks">Completed Tasks</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="domain">Domain</string>
 </resources>
